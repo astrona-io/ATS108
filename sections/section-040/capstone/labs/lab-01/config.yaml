@@ -1,0 +1,56 @@
+# Run Dashboard-As-Code End To End
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-capstone-040"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-capstone-040-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-pipeline-succeeds"
+      description: "Starts a pipeline run and confirms it completes"
+      type: "file"
+      source: "validation/validate-pipeline-succeeds.sh"
+    - name: "validate-go-output-clean"
+      description: "Confirms the Go dashboards build to clean JSON"
+      type: "file"
+      source: "validation/validate-go-output-clean.sh"
+    - name: "validate-all-dashboards-on-server"
+      description: "Confirms every dashboard of the repository is on the server as the code builds it"
+      type: "file"
+      source: "validation/validate-all-dashboards-on-server.sh"
+
+teardown:
+  keepCluster: false

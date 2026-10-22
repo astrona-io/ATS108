@@ -1,0 +1,56 @@
+# Generate A Dashboard Per Job
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-capstone-030"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-capstone-030-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-tests-pass"
+      description: "Confirms the Go tests pass and the test file is unchanged"
+      type: "file"
+      source: "validation/validate-tests-pass.sh"
+    - name: "validate-build-output"
+      description: "Confirms per-job builds to clean JSON with one group per job"
+      type: "file"
+      source: "validation/validate-build-output.sh"
+    - name: "validate-matches-code"
+      description: "Confirms the server holds what per-job builds"
+      type: "file"
+      source: "validation/validate-matches-code.sh"
+
+teardown:
+  keepCluster: false

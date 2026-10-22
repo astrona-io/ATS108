@@ -1,0 +1,417 @@
+# Starting workloads for every ATS108 environment: Prometheus and the
+# tester (observability), the Git server (gitea) and the DaC runner (dac).
+# Perses itself is installed by Helm in the bootstrap, not by this file.
+# Example data source and client: a Prometheus server that scrapes itself
+# and Perses, and a tester pod with curl and jq.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: observability
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets: ["localhost:9090"]
+      - job_name: perses
+        static_configs:
+          - targets: ["perses.perses:8080"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: observability
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v3.15.1
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.retention.time=1d
+          ports:
+            - name: http
+              containerPort: 9090
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: http
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: observability
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: http
+      port: 9090
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tester
+  namespace: observability
+  labels:
+    app: tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tester
+  template:
+    metadata:
+      labels:
+        app: tester
+    spec:
+      containers:
+        - name: tester
+          image: nicolaka/netshoot:v0.13
+          command: ["sh", "-c", "while true; do sleep 30; done"]
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitea
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea
+  namespace: gitea
+  labels:
+    app: gitea
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gitea
+  template:
+    metadata:
+      labels:
+        app: gitea
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: gitea
+          image: gitea/gitea:28.2.0-rootless
+          env:
+            - name: GITEA__security__INSTALL_LOCK
+              value: "true"
+            - name: GITEA__database__DB_TYPE
+              value: sqlite3
+            - name: GITEA__server__HTTP_PORT
+              value: "3000"
+            - name: GITEA__server__ROOT_URL
+              value: http://gitea.localtest.me:3000/
+            - name: GITEA__server__DISABLE_SSH
+              value: "true"
+            - name: GITEA__service__DISABLE_REGISTRATION
+              value: "true"
+            - name: GITEA__repository__DEFAULT_BRANCH
+              value: main
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /api/healthz
+              port: http
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/gitea
+            - name: config
+              mountPath: /etc/gitea
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: config
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea-http
+  namespace: gitea
+  labels:
+    app: gitea
+spec:
+  selector:
+    app: gitea
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+---
+# The DaC runner: Go 1.26.5 with git, curl and jq, plus percli and cue in
+# /tools. Every DaC command on a page runs here through `dac-run`.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dac
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dac-runner-scripts
+  namespace: dac
+data:
+  install-tools.sh: |
+    #!/bin/sh
+    # Downloads the pinned DaC tools into /tools (an emptyDir shared with the
+    # main container): percli from the Perses release archive, and cue.
+    set -eu
+    PERSES_VERSION=0.54.0
+    CUE_VERSION=0.17.1
+    ARCH="$(uname -m)"
+    case "$ARCH" in x86_64) ARCH=amd64 ;; aarch64|arm64) ARCH=arm64 ;; esac
+    cd /tmp
+    wget -q -O perses.tgz "https://github.com/perses/perses/releases/download/v${PERSES_VERSION}/perses_${PERSES_VERSION}_linux_${ARCH}.tar.gz"
+    tar -xzf perses.tgz percli
+    wget -q -O cue.tgz "https://github.com/cue-lang/cue/releases/download/v${CUE_VERSION}/cue_v${CUE_VERSION}_linux_${ARCH}.tar.gz"
+    tar -xzf cue.tgz cue
+    install -m 0755 percli /tools/percli
+    install -m 0755 cue /tools/cue
+    ls -l /tools
+  dac-run: |
+    #!/bin/sh
+    # dac-run COMMAND [ARGS...]
+    # Makes /work/dashboards an exact copy of origin/main of gitops/dashboards,
+    # logs percli in to Perses if needed, then runs COMMAND in that folder.
+    # The copy is a read-only mirror: anything not pushed to Gitea is not here.
+    set -eu
+    REPO_URL="http://gitops:gitops-password@gitea.localtest.me:3000/gitops/dashboards.git"
+    PERSES_URL="http://perses.localtest.me:8080"
+    WORKDIR=/work/dashboards
+    if [ ! -d "$WORKDIR/.git" ]; then
+      git clone -q "$REPO_URL" "$WORKDIR"
+    fi
+    cd "$WORKDIR"
+    git fetch -q origin main
+    git reset -q --hard origin/main
+    git clean -q -fdx -e built
+    # Resolve CUE dependencies the module file does not list yet.
+    if [ -f cue.mod/module.cue ] && ! cue mod tidy --check >/dev/null 2>&1; then
+      cue mod tidy >/dev/null 2>&1 || true
+    fi
+    if [ ! -f "$HOME/.perses/config.json" ]; then
+      percli login "$PERSES_URL" >/dev/null
+      percli project inventory >/dev/null
+    fi
+    exec "$@"
+  grader-lib.sh: |
+    # Helpers for the graders and reference solutions. Source it inside dac-runner.
+    PERSES_URL="http://perses.localtest.me:8080"
+    PROJECT="inventory"
+    REPO_URL="http://gitops:gitops-password@gitea.localtest.me:3000/gitops/dashboards.git"
+
+    fail() { echo "FAIL: $*"; exit 1; }
+    pass() { echo "PASS: $*"; exit 0; }
+
+    # build_json FILE: builds one DaC file at the head of main and prints the JSON.
+    build_json() { dac-run percli dac build -f "$1" -ojson -m stdout; }
+
+    # server_json NAME: prints the dashboard NAME of the project as the API serves it.
+    server_json() { curl -fsS "$PERSES_URL/api/v1/projects/$PROJECT/dashboards/$1"; }
+
+    # norm: reduces a dashboard to what the course grades (names, groups, panels, queries, variables).
+    norm() { jq -S -f /opt/dac/norm.jq; }
+
+    # repo_change MESSAGE SCRIPT: clones main, runs SCRIPT in the clone, commits and pushes.
+    repo_change() {
+      _message="$1"; _script="$2"
+      rm -rf /tmp/edit && git clone -q "$REPO_URL" /tmp/edit
+      ( cd /tmp/edit && eval "$_script" && git add -A \
+        && git -c user.name=gitops -c user.email=gitops@example.com commit -qm "$_message" \
+        && git push -q origin main )
+    }
+  norm.jq: |
+    {
+      name: .metadata.name,
+      project: .metadata.project,
+      display: .spec.display.name,
+      variables: [(.spec.variables // [])[] | {name: .spec.name, kind: .spec.plugin.kind, label: .spec.plugin.spec.labelName, matchers: .spec.plugin.spec.matchers}],
+      groups: [(.spec.layouts // [])[] | {title: .spec.display.title, panels: [.spec.items[].content["$ref"]]}],
+      panels: [(.spec.panels // {}) | to_entries[] | {key: .key, name: .value.spec.display.name, kind: .value.spec.plugin.kind, queries: [(.value.spec.queries // [])[] | .spec.plugin.spec.query]}] | sort_by(.key)
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dac-runner
+  namespace: dac
+  labels:
+    app: dac-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dac-runner
+  template:
+    metadata:
+      labels:
+        app: dac-runner
+    spec:
+      initContainers:
+        - name: install-tools
+          image: alpine:3.22
+          command: ["sh", "/opt/dac/install-tools.sh"]
+          volumeMounts:
+            - name: tools
+              mountPath: /tools
+            - name: scripts
+              mountPath: /opt/dac
+      containers:
+        - name: runner
+          image: golang:1.26.5-alpine
+          command: ["sh", "-c", "apk add --no-cache git curl jq >/dev/null && touch /tmp/ready && while true; do sleep 30; done"]
+          env:
+            - name: PATH
+              value: /tools:/opt/dac:/usr/local/go/bin:/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            - name: GOTOOLCHAIN
+              value: local
+          readinessProbe:
+            exec:
+              command: ["test", "-f", "/tmp/ready"]
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: 512Mi
+          volumeMounts:
+            - name: tools
+              mountPath: /tools
+            - name: scripts
+              mountPath: /opt/dac
+            - name: work
+              mountPath: /work
+      volumes:
+        - name: tools
+          emptyDir: {}
+        - name: work
+          emptyDir: {}
+        - name: scripts
+          configMap:
+            name: dac-runner-scripts
+            defaultMode: 0755
+---
+# The pipeline script. Section 040 is about this file.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboards-pipeline
+  namespace: dac
+data:
+  pipeline.sh: |
+    #!/bin/sh
+    # The dashboard pipeline: fetch the repository, build every dashboard, lint
+    # the results, then apply.
+    REPO_URL="http://gitops:gitops-password@gitea.localtest.me:3000/gitops/dashboards.git"
+    PERSES_URL="http://perses.localtest.me:8080"
+
+    echo "== fetch"
+    git clone -q --depth 1 "$REPO_URL" /work/repo
+    cd /work/repo
+    percli login "$PERSES_URL" >/dev/null
+
+    echo "== dependencies"
+    cue mod tidy
+    go mod download
+
+    echo "== build"
+    percli dac build -d dashboards -ojson || echo "some dashboards did not build"
+
+    echo "== lint"
+    percli lint -d built
+
+    echo "== apply"
+    percli apply -d built
+    exit 0
+---
+# The pipeline as a suspended CronJob: a run is started by hand with
+# kubectl -n dac create job <name> --from=cronjob/dashboards-pipeline
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dashboards-pipeline
+  namespace: dac
+spec:
+  schedule: "0 0 1 1 *"
+  suspend: true
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          initContainers:
+            - name: install-tools
+              image: alpine:3.22
+              command: ["sh", "/opt/dac/install-tools.sh"]
+              volumeMounts:
+                - name: tools
+                  mountPath: /tools
+                - name: scripts
+                  mountPath: /opt/dac
+          containers:
+            - name: pipeline
+              image: golang:1.26.5-alpine
+              command: ["sh", "-c", "apk add --no-cache git >/dev/null && sh /pipeline/pipeline.sh"]
+              env:
+                - name: PATH
+                  value: /tools:/opt/dac:/usr/local/go/bin:/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                - name: GOTOOLCHAIN
+                  value: local
+              volumeMounts:
+                - name: tools
+                  mountPath: /tools
+                - name: scripts
+                  mountPath: /opt/dac
+                - name: pipeline
+                  mountPath: /pipeline
+                - name: work
+                  mountPath: /work
+          volumes:
+            - name: tools
+              emptyDir: {}
+            - name: work
+              emptyDir: {}
+            - name: scripts
+              configMap:
+                name: dac-runner-scripts
+                defaultMode: 0755
+            - name: pipeline
+              configMap:
+                name: dashboards-pipeline

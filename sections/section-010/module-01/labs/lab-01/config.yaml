@@ -1,0 +1,52 @@
+# Build And Apply A CUE Dashboard
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-lab-010-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-lab-010-01-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-dashboard-on-server"
+      description: "Confirms the dashboard scrape-health exists in project inventory"
+      type: "file"
+      source: "validation/validate-dashboard-on-server.sh"
+    - name: "validate-matches-code"
+      description: "Confirms the server holds exactly what scrape-health.cue builds"
+      type: "file"
+      source: "validation/validate-matches-code.sh"
+
+teardown:
+  keepCluster: false

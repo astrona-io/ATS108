@@ -1,0 +1,60 @@
+# Repair A CUE Dashboard Library
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-capstone-020-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-everything-builds"
+      description: "Confirms every dashboard in the repository builds"
+      type: "file"
+      source: "validation/validate-everything-builds.sh"
+    - name: "validate-schema-kept"
+      description: "Confirms Targets up panels use the latest value and the library keeps the plugin schema"
+      type: "file"
+      source: "validation/validate-schema-kept.sh"
+    - name: "validate-groups"
+      description: "Confirms the group titles and the Perses job are what the task asks"
+      type: "file"
+      source: "validation/validate-groups.sh"
+    - name: "validate-matches-code"
+      description: "Confirms the server holds what each dashboard builds"
+      type: "file"
+      source: "validation/validate-matches-code.sh"
+
+teardown:
+  keepCluster: false

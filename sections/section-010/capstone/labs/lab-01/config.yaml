@@ -1,0 +1,56 @@
+# Bring A Hand-Edited Dashboard Back Under Code
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-capstone-010-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-panel-kept-in-code"
+      description: "Confirms scrape-health.cue builds the Head series panel in the Prometheus group"
+      type: "file"
+      source: "validation/validate-panel-kept-in-code.sh"
+    - name: "validate-browser-query-reverted"
+      description: "Confirms the query changed in the browser is back to what the code says"
+      type: "file"
+      source: "validation/validate-browser-query-reverted.sh"
+    - name: "validate-matches-code"
+      description: "Confirms the server holds exactly what scrape-health.cue builds"
+      type: "file"
+      source: "validation/validate-matches-code.sh"
+
+teardown:
+  keepCluster: false

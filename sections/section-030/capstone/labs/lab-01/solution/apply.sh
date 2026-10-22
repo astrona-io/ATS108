@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Reference solution, applied only by `astrona test` (the `testing:` block).
+# `astrona run` never runs this. Taken from solution.md - if one changes,
+# change the other.
+set -euo pipefail
+
+in_runner() { kubectl -n dac exec -i deploy/dac-runner -- sh -s; }
+in_runner <<'GRADE'
+set -u
+. /opt/dac/grader-lib.sh
+repo_change "Use each job, and keep the build output clean" "mkdir -p lib/boards && printf '%s' 'cGFja2FnZSBib2FyZHMKCmltcG9ydCAoCgkiZ2l0aHViLmNvbS9wZXJzZXMvcGVyc2VzL2dvLXNkay9kYXNoYm9hcmQiCglwYW5lbGdyb3VwICJnaXRodWIuY29tL3BlcnNlcy9wZXJzZXMvZ28tc2RrL3BhbmVsLWdyb3VwIgopCgovLyBKb2JHcm91cHMgcmV0dXJucyBvbmUgcGFuZWwgZ3JvdXAgcGVyIHNjcmFwZSBqb2IsIG5hbWVkICJKb2IgPGpvYj4iLCB3aXRoCi8vIHRoZSB0YXJnZXRzIHRoYXQgYXJlIHVwIGFuZCB0aGUgc2FtcGxlcyBhcHBlbmRlZCBmb3IgdGhhdCBqb2IuCmZ1bmMgSm9iR3JvdXBzKGpvYnMgW11zdHJpbmcpIFtdZGFzaGJvYXJkLk9wdGlvbiB7Cgl2YXIgZ3JvdXBzIFtdZGFzaGJvYXJkLk9wdGlvbgoJZm9yIF8sIGpvYiA6PSByYW5nZSBqb2JzIHsKCQlncm91cHMgPSBhcHBlbmQoZ3JvdXBzLCBkYXNoYm9hcmQuQWRkUGFuZWxHcm91cCgiSm9iICIram9iLAoJCQlwYW5lbGdyb3VwLlBhbmVsc1BlckxpbmUoMiksCgkJCVRhcmdldHNVcChqb2IpLAoJCQlTYW1wbGVzQXBwZW5kZWQoam9iKSwKCQkpKQoJfQoJcmV0dXJuIGdyb3Vwcwp9Cg==' | base64 -d > lib/boards/jobs.go && mkdir -p dashboards/go/per-job && printf '%s' 'Ly8gVGhlIHBlci1qb2IgZGFzaGJvYXJkOiBvbmUgcGFuZWwgZ3JvdXAgcGVyIFByb21ldGhldXMgc2NyYXBlIGpvYi4KLy8gQnVpbGQgaXQgd2l0aDogcGVyY2xpIGRhYyBidWlsZCAtZiBkYXNoYm9hcmRzL2dvL3Blci1qb2IvbWFpbi5nbyAtb2pzb24KcGFja2FnZSBtYWluCgppbXBvcnQgKAoJImZsYWciCgkidGltZSIKCgkiZ2l0aHViLmNvbS9wZXJzZXMvcGVyc2VzL2dvLXNkayIKCSJnaXRodWIuY29tL3BlcnNlcy9wZXJzZXMvZ28tc2RrL2Rhc2hib2FyZCIKCgkiZXhhbXBsZS5jb20vZGFzaGJvYXJkcy9saWIvYm9hcmRzIgopCgpmdW5jIG1haW4oKSB7CglmbGFnLlBhcnNlKCkKCWV4ZWMgOj0gc2RrLk5ld0V4ZWMoKQoJb3B0aW9ucyA6PSBbXWRhc2hib2FyZC5PcHRpb257CgkJZGFzaGJvYXJkLlByb2plY3ROYW1lKCJpbnZlbnRvcnkiKSwKCQlkYXNoYm9hcmQuTmFtZSgiUGVyIEpvYiIpLAoJCWRhc2hib2FyZC5EdXJhdGlvbih0aW1lLkhvdXIpLAoJfQoJb3B0aW9ucyA9IGFwcGVuZChvcHRpb25zLCBib2FyZHMuSm9iR3JvdXBzKFtdc3RyaW5neyJwcm9tZXRoZXVzIiwgInBlcnNlcyJ9KS4uLikKCWJ1aWxkZXIsIGJ1aWxkRXJyIDo9IGRhc2hib2FyZC5OZXcoInBlci1qb2IiLCBvcHRpb25zLi4uKQoJZXhlYy5CdWlsZERhc2hib2FyZChidWlsZGVyLCBidWlsZEVycikKfQo=' | base64 -d > dashboards/go/per-job/main.go"
+dac-run sh -c 'percli dac build -f dashboards/go/per-job/main.go -ojson && percli apply -f built/dashboards/go/per-job/main_output.json'
+GRADE

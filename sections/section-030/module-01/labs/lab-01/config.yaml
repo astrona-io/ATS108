@@ -1,0 +1,60 @@
+# Port A CUE Dashboard To The Go SDK
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-lab-030-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-lab-030-01-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-go-dashboard-builds"
+      description: "Confirms team-overview-go builds with the right name and title"
+      type: "file"
+      source: "validation/validate-go-dashboard-builds.sh"
+    - name: "validate-same-as-cue"
+      description: "Confirms the Go and CUE dashboards have the same variable, groups, panels and queries"
+      type: "file"
+      source: "validation/validate-same-as-cue.sh"
+    - name: "validate-uses-shared-functions"
+      description: "Confirms the Go program uses the shared functions in lib/boards"
+      type: "file"
+      source: "validation/validate-uses-shared-functions.sh"
+    - name: "validate-matches-code"
+      description: "Confirms the server holds what both programs build"
+      type: "file"
+      source: "validation/validate-matches-code.sh"
+
+teardown:
+  keepCluster: false
