@@ -112,9 +112,18 @@ for _ in $(seq 1 60); do
 done
 
 echo "$LOG Creating the Gitea user ${GIT_USER} and the repository ${GIT_USER}/${REPO}..."
-kubectl -n gitea exec deploy/gitea -- gitea admin user create \
-  --username "$GIT_USER" --password "$GIT_PASSWORD" --email gitops@example.com \
-  --admin --must-change-password=false >/dev/null 2>&1 || true
+# Gitea can refuse the first commands while it finishes starting, so retry
+# until the user exists; fail here rather than later at the first clone.
+gitea_user_ready=false
+for _ in $(seq 1 30); do
+  kubectl -n gitea exec deploy/gitea -- gitea admin user create \
+    --username "$GIT_USER" --password "$GIT_PASSWORD" --email gitops@example.com \
+    --admin --must-change-password=false >/dev/null 2>&1 && { gitea_user_ready=true; break; }
+  kubectl -n gitea exec deploy/gitea -- gitea admin user list 2>/dev/null \
+    | awk 'NR > 1 {print $2}' | grep -x "$GIT_USER" >/dev/null && { gitea_user_ready=true; break; }
+  sleep 2
+done
+[ "$gitea_user_ready" = true ] || { echo "ERROR: could not create the Gitea user $GIT_USER." >&2; exit 1; }
 runner sh -c "curl -fsS -u $GIT_USER:$GIT_PASSWORD http://gitea.localtest.me:3000/api/v1/repos/$GIT_USER/$REPO >/dev/null 2>&1 || \
   curl -fsS -u $GIT_USER:$GIT_PASSWORD -X POST -H 'Content-Type: application/json' \
     -d '{\"name\":\"$REPO\",\"auto_init\":false,\"default_branch\":\"main\",\"private\":true}' \
