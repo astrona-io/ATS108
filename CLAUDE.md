@@ -358,6 +358,13 @@ dashboards/go/<name>/main.go  # one Go dashboard per folder (package main)
 
 ### Environment facts the text must respect
 
+- **Seen on a live run (2026-10-23):** git in the `dac-runner` pod refused to
+  work in copied repositories ("detected dubious ownership"). Every Go
+  container sets `safe.directory=*` through `GIT_CONFIG_COUNT`,
+  `GIT_CONFIG_KEY_0` and `GIT_CONFIG_VALUE_0`; keep these env vars on any new
+  container that runs git. `percli dac build` with CUE built and matched the
+  server in lab 010.
+
 - **Two addresses, one trick.** `http://perses.localtest.me:8080` and
   `http://gitea.localtest.me:3000` work in the cluster through CoreDNS
   `rewrite stop` blocks (answer name rewritten back) and on the reader's

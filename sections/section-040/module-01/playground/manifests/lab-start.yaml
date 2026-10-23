@@ -299,6 +299,14 @@ spec:
           image: golang:1.26.5-alpine
           command: ["sh", "-c", "apk add --no-cache git curl jq >/dev/null && touch /tmp/ready && while true; do sleep 30; done"]
           env:
+            # Repositories here are copied in or owned by another user; let git
+            # work in them (safe.directory) instead of refusing with "dubious ownership".
+            - name: GIT_CONFIG_COUNT
+              value: "1"
+            - name: GIT_CONFIG_KEY_0
+              value: safe.directory
+            - name: GIT_CONFIG_VALUE_0
+              value: "*"
             - name: PATH
               value: /tools:/opt/dac:/usr/local/go/bin:/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
             - name: GOTOOLCHAIN
@@ -395,6 +403,14 @@ spec:
               image: golang:1.26.5-alpine
               command: ["sh", "-c", "apk add --no-cache git >/dev/null && sh /pipeline/pipeline.sh"]
               env:
+                # Repositories here are copied in or owned by another user; let git
+                # work in them (safe.directory) instead of refusing with "dubious ownership".
+                - name: GIT_CONFIG_COUNT
+                  value: "1"
+                - name: GIT_CONFIG_KEY_0
+                  value: safe.directory
+                - name: GIT_CONFIG_VALUE_0
+                  value: "*"
                 - name: PATH
                   value: /tools:/opt/dac:/usr/local/go/bin:/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
                 - name: GOTOOLCHAIN
