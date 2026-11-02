@@ -29,8 +29,6 @@ training:
     name: Perses
     code: PERSES
     provider: Astrona
-    domain: Dashboard-as-Code With CUE & Go
-    weight: 25
 
 modules:
 
