@@ -286,3 +286,188 @@ questions:
         explanation: "Not correct. Its state does not change."
     correct_option: b
     explanation: "Correct. The pipeline only sees what is in `built`."
+
+  - id: ats108-final-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the output path"
+    source_readings:
+      - sections/section-010/module-02/course-03-controlling-the-build.md
+    prompt: "Where does the build write the result of `dashboards/cue/prometheus-overview.cue` in JSON?"
+    options:
+      - id: a
+        text: "`dashboards/cue/prometheus-overview.json`"
+        explanation: "Not correct. The result goes to the `built` folder."
+      - id: b
+        text: "`built/dashboards/cue/prometheus-overview_output.json`"
+        explanation: "Correct. The output path is the source path without its extension, placed in `built` with the suffix `_output` and the format."
+      - id: c
+        text: "`built/prometheus-overview.json`"
+        explanation: "Not correct. The path keeps the source folders."
+      - id: d
+        text: "Standard output only."
+        explanation: "Not correct. That happens only with `-m stdout`."
+    correct_option: b
+    explanation: "Correct. The output path is the source path without its extension, placed in `built` with the suffix `_output` and the format."
+
+  - id: ats108-final-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle a project mismatch"
+    source_readings:
+      - sections/section-010/module-02/course-04-projects-and-apply.md
+    prompt: "A dashboard names a project that does not exist. What is the correct fix for a dashboard that belongs in `inventory`?"
+    options:
+      - id: a
+        text: "Apply with `--force`."
+        explanation: "Not correct. The source would still name the wrong project."
+      - id: b
+        text: "Create the missing project with `--create-project`."
+        explanation: "Not correct. That makes the wrong project permanent."
+      - id: c
+        text: "Change the project in the source, commit, build and apply."
+        explanation: "Correct. The fix belongs in the code, so the next build and apply produce the right result."
+      - id: d
+        text: "Edit the dashboard in the browser."
+        explanation: "Not correct. The code would then differ from the server."
+    correct_option: c
+    explanation: "Correct. The fix belongs in the code, so the next build and apply produce the right result."
+
+  - id: ats108-final-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Chain variables"
+    source_readings:
+      - sections/section-020/module-02/course-02-chained-variables.md
+    prompt: "How does the variable group builder pass earlier variables to a later one?"
+    options:
+      - id: a
+        text: "By name, in any order."
+        explanation: "Not correct. Order decides."
+      - id: b
+        text: "It passes all variables to all variables."
+        explanation: "Not correct. Only earlier ones."
+      - id: c
+        text: "It does not chain variables."
+        explanation: "Not correct. It does."
+      - id: d
+        text: "In list order: each variable receives the ones listed before it."
+        explanation: "Correct. A later variable uses the earlier ones as filters in its matchers."
+    correct_option: d
+    explanation: "Correct. A later variable uses the earlier ones as filters in its matchers."
+
+  - id: ats108-final-q16
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Generate groups"
+    source_readings:
+      - sections/section-020/module-02/course-03-generating-panel-groups.md
+    prompt: "How do you make a panel group for each job in `_jobs`?"
+    options:
+      - id: a
+        text: "Use a `for` comprehension that yields one group struct per job."
+        explanation: "Correct. The comprehension turns a data change into a structure change."
+      - id: b
+        text: "Copy the group block for each job."
+        explanation: "Not correct. That repeats code."
+      - id: c
+        text: "Add each job to `#title`."
+        explanation: "Not correct. A title is one string."
+      - id: d
+        text: "Use `cue fmt`."
+        explanation: "Not correct. Formatting does not generate."
+    correct_option: a
+    explanation: "Correct. The comprehension turns a data change into a structure change."
+
+  - id: ats108-final-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pass a slice of options"
+    source_readings:
+      - sections/section-030/module-02/course-02-data-driven-dashboards.md
+    prompt: "How do you pass a slice named `options` to `dashboard.New`?"
+    options:
+      - id: a
+        text: "`dashboard.New(\"name\", options)`"
+        explanation: "Not correct. Go rejects a slice as a single option."
+      - id: b
+        text: "`dashboard.New(\"name\", options...)`"
+        explanation: "Correct. The three dots expand the slice into separate arguments."
+      - id: c
+        text: "`dashboard.New(options)`"
+        explanation: "Not correct. The name comes first."
+      - id: d
+        text: "`dashboard.New(\"name\", &options)`"
+        explanation: "Not correct. A pointer is not a list of options."
+    correct_option: b
+    explanation: "Correct. The three dots expand the slice into separate arguments."
+
+  - id: ats108-final-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the counts in a test"
+    source_readings:
+      - sections/section-030/module-02/course-03-testing-dashboard-functions.md
+    prompt: "Where does a test read the number of panels of a built dashboard?"
+    options:
+      - id: a
+        text: "`builder.Panels`"
+        explanation: "Not correct. The dashboard is in the field `Dashboard`."
+      - id: b
+        text: "The `built` folder."
+        explanation: "Not correct. Tests do not build files."
+      - id: c
+        text: "`builder.Dashboard.Spec.Panels`"
+        explanation: "Correct. The builder holds the finished dashboard after `dashboard.New` succeeds."
+      - id: d
+        text: "The server API."
+        explanation: "Not correct. Tests run without a server."
+    correct_option: c
+    explanation: "Correct. The builder holds the finished dashboard after `dashboard.New` succeeds."
+
+  - id: ats108-final-q19
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe check mode"
+    source_readings:
+      - sections/section-040/module-02/course-02-check-and-deploy-modes.md
+    prompt: "What does a run with `MODE=check` do?"
+    options:
+      - id: a
+        text: "It applies the dashboards twice."
+        explanation: "Not correct. It applies nothing."
+      - id: b
+        text: "It skips the build."
+        explanation: "Not correct. It builds and lints."
+      - id: c
+        text: "It deletes the dashboards."
+        explanation: "Not correct. It changes nothing."
+      - id: d
+        text: "It runs the steps up to the diff and exits successfully before the apply."
+        explanation: "Correct. The Job completes and the server stays unchanged."
+    correct_option: d
+    explanation: "Correct. The Job completes and the server stays unchanged."
+
+  - id: ats108-final-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Verify through the API"
+    source_readings:
+      - sections/section-040/module-02/course-04-verifying-after-apply.md
+    prompt: "What does a green pipeline run prove?"
+    options:
+      - id: a
+        text: "That every command exited with code 0, not that the server matches the code."
+        explanation: "Correct. Use the API list and `percli dac diff` after the apply to verify."
+      - id: b
+        text: "That the server equals the build."
+        explanation: "Not correct. That needs a check."
+      - id: c
+        text: "That the dashboards are correct."
+        explanation: "Not correct. Correctness is separate."
+      - id: d
+        text: "That nobody edited the browser."
+        explanation: "Not correct. Drift is separate."
+    correct_option: a
+    explanation: "Correct. Use the API list and `percli dac diff` after the apply to verify."
+

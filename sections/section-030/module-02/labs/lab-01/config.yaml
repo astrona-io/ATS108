@@ -1,0 +1,65 @@
+# Add A Reusable Job Group To The Go Library
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-lab-030-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-lab-030-02-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-library-tests"
+      description: "Confirms the library tests pass and include a test of JobGroup"
+      type: "file"
+      source: "validation/validate-library-tests.sh"
+    - name: "validate-uses-shared-functions"
+      description: "Confirms the program loops over the jobs and uses boards.JobGroup"
+      type: "file"
+      source: "validation/validate-uses-shared-functions.sh"
+    - name: "validate-go-dashboard-builds"
+      description: "Confirms jobs-overview-go builds one group per job with the shared panels"
+      type: "file"
+      source: "validation/validate-go-dashboard-builds.sh"
+    - name: "validate-matches-code"
+      description: "Confirms the server holds exactly what jobs/main.go builds"
+      type: "file"
+      source: "validation/validate-matches-code.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - docker.io/persesdev/perses:v0.54.0
+      - gitea/gitea:28.2.0-rootless
+      - golang:1.26.5-alpine
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

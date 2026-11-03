@@ -14,14 +14,23 @@ This section teaches the loop every later page uses. You change a file in Git an
 
 ## The learning path
 
-The module has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground: Perses with the project `inventory`, Prometheus, a Git server with the repository `gitops/dashboards`, and the `dac-runner` pod where every build runs.
+Each module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground: Perses with the project `inventory`, Prometheus, a Git server with the repository `gitops/dashboards`, and the `dac-runner` pod where every build runs.
 
 ### 1. Build And Apply Your First Dashboard As Code
 
 1. Dashboards As Code
 2. The Repository And The Build
 3. Applying And Diffing Built Dashboards, followed by the lab **Build And Apply A CUE Dashboard**
-4. Summary
+4. Reading A Built Dashboard
+5. Summary
+
+### 2. Prepare A Repository And Control Where Dashboards Go
+
+1. Setting Up A CUE Repository
+2. Setting Up A Go Repository
+3. Controlling The Build
+4. Projects And The Apply Command, followed by the lab **Fix The Project Of A Dashboard**
+5. Summary
 
 ## Section capstone: Bring A Hand-Edited Dashboard Back Under Code
 

@@ -4,7 +4,7 @@ A dashboard in JSON accepts any value you type. A calculation called `average` t
 
 This module teaches CUE from that angle. Keep one sentence in mind: **a CUE dashboard is your values unified with the Perses schemas, and the build fails if they cannot agree.** Unification is the CUE operation that combines two values into one that satisfies both.
 
-The module has three parts. **CUE Essentials For Dashboards** runs small CUE files to show types, constraints, defaults, unification and definitions. **The Perses CUE Builders** reads a real dashboard built with the SDK: the dashboard builder, panel groups and a label values variable. **Shared Definitions And Build-Time Validation** shows how the repository's panel library takes a parameter, and what CUE says when a value breaks a schema. A graded lab follows the third part.
+The module has four parts. **CUE Essentials For Dashboards** runs small CUE files to show types, constraints, defaults, unification and definitions. **The Perses CUE Builders** reads a real dashboard built with the SDK: the dashboard builder, panel groups and a label values variable. **Shared Definitions And Build-Time Validation** shows how the repository's panel library takes a parameter, and what CUE says when a value breaks a schema. A graded lab follows the third part. **Reading A CUE Build Error** then makes the three kinds of build error on purpose and shows how to read each one.
 
 ## Learning objectives
 

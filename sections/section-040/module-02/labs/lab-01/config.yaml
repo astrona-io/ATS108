@@ -1,0 +1,61 @@
+# Add A Check Mode To The Pipeline
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-108-lab-040-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, Perses v0.54.0, Prometheus, Gitea and the DaC runner"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-108-lab-040-02-setup"
+      description: "Pushes the starting state of gitops/dashboards and prepares the task"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus, the tester pod, Gitea and the DaC runner."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses, Gitea and the DaC runner answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-mode-in-script"
+      description: "Confirms the script reads MODE, still lints online and applies, and the CronJob is unchanged"
+      type: "file"
+      source: "validation/validate-mode-in-script.sh"
+    - name: "validate-check-mode-applies-nothing"
+      description: "Confirms a check run applies nothing and still fails on a broken commit"
+      type: "file"
+      source: "validation/validate-check-mode-applies-nothing.sh"
+    - name: "validate-deploy-mode-applies"
+      description: "Confirms a run without MODE applies every dashboard of the repository"
+      type: "file"
+      source: "validation/validate-deploy-mode-applies.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - docker.io/persesdev/perses:v0.54.0
+      - gitea/gitea:28.2.0-rootless
+      - golang:1.26.5-alpine
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

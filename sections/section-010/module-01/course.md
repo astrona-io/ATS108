@@ -4,7 +4,7 @@ A dashboard edited in the browser has no history. You cannot review a change bef
 
 This module walks through that loop once, end to end. Keep one sentence in mind: **Git holds the source, `percli dac build` turns it into a dashboard, and `percli apply` puts the dashboard on the server.** Everything else in this course is a variation of that sentence.
 
-The module has three parts. **Dashboards As Code** explains what DaC solves and compares the two ways Perses offers to write dashboards: the CUE SDK and the Go SDK. **The Repository And The Build** clones the repository, shows its layout, and builds a dashboard into the `built` folder. **Applying And Diffing Built Dashboards** applies the result to Perses and compares the server with the code. A graded lab follows the third part.
+The module has four parts. **Dashboards As Code** explains what DaC solves and compares the two ways Perses offers to write dashboards: the CUE SDK and the Go SDK. **The Repository And The Build** clones the repository, shows its layout, and builds a dashboard into the `built` folder. **Applying And Diffing Built Dashboards** applies the result to Perses and compares the server with the code. A graded lab follows the third part. **Reading A Built Dashboard** then names every part of the JSON a build produces.
 
 ## Learning objectives
 

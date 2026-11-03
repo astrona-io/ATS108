@@ -240,3 +240,234 @@ questions:
         explanation: "Not correct. Library functions can be tested with `go test`."
     correct_option: c
     explanation: "Correct. A `_test.go` file in package `main` under `dashboards` is passed to `go run`, which refuses it."
+
+  - id: ats108-030-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the option types"
+    source_readings:
+      - sections/section-030/module-02/course-01-options-as-building-blocks.md
+    prompt: "What does `dashboard.AddPanelGroup(...)` return?"
+    options:
+      - id: a
+        text: "A `panelgroup.Option`."
+        explanation: "Not correct. That is returned by `AddPanel`."
+      - id: b
+        text: "A `panel.Option`."
+        explanation: "Not correct. That is returned by query helpers."
+      - id: c
+        text: "A finished dashboard."
+        explanation: "Not correct. The builder applies options later."
+      - id: d
+        text: "A `dashboard.Option`."
+        explanation: "Correct. The option adds a whole group to a dashboard when `dashboard.New` applies it."
+    correct_option: d
+    explanation: "Correct. The option adds a whole group to a dashboard when `dashboard.New` applies it."
+
+  - id: ats108-030-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write a function that returns a group"
+    source_readings:
+      - sections/section-030/module-02/course-01-options-as-building-blocks.md
+    prompt: "Why write `JobGroup(job string) dashboard.Option`?"
+    options:
+      - id: a
+        text: "It replaces a repeated block with one call and keeps the panels in one place."
+        explanation: "Correct. The function is ordinary Go and returns an option that a dashboard uses like any other."
+      - id: b
+        text: "It makes the build faster."
+        explanation: "Not correct. It does not change speed."
+      - id: c
+        text: "It is required by `percli`."
+        explanation: "Not correct. It is a choice."
+      - id: d
+        text: "It lets the dashboard skip imports."
+        explanation: "Not correct. The library file needs the dashboard import."
+    correct_option: a
+    explanation: "Correct. The function is ordinary Go and returns an option that a dashboard uses like any other."
+
+  - id: ats108-030-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pass a slice of options"
+    source_readings:
+      - sections/section-030/module-02/course-02-data-driven-dashboards.md
+    prompt: "How do you pass a slice named `options` to `dashboard.New`?"
+    options:
+      - id: a
+        text: "`dashboard.New(\"name\", options)`"
+        explanation: "Not correct. Go rejects a slice as a single option."
+      - id: b
+        text: "`dashboard.New(\"name\", options...)`"
+        explanation: "Correct. The three dots expand the slice into separate arguments."
+      - id: c
+        text: "`dashboard.New(options)`"
+        explanation: "Not correct. The name comes first."
+      - id: d
+        text: "`dashboard.New(\"name\", &options)`"
+        explanation: "Not correct. A pointer is not a list of options."
+    correct_option: b
+    explanation: "Correct. The three dots expand the slice into separate arguments."
+
+  - id: ats108-030-q14
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Keep standard output clean"
+    source_readings:
+      - sections/section-030/module-02/course-02-data-driven-dashboards.md
+    prompt: "Where should a dashboard program print debug text?"
+    options:
+      - id: a
+        text: "To standard output."
+        explanation: "Not correct. That text becomes part of the dashboard."
+      - id: b
+        text: "To the `built` folder."
+        explanation: "Not correct. The build writes there."
+      - id: c
+        text: "To standard error."
+        explanation: "Correct. Standard output carries the dashboard only."
+      - id: d
+        text: "Nowhere is possible."
+        explanation: "Not correct. Standard error is available."
+    correct_option: c
+    explanation: "Correct. Standard output carries the dashboard only."
+
+  - id: ats108-030-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make builds repeatable"
+    source_readings:
+      - sections/section-030/module-02/course-02-data-driven-dashboards.md
+    prompt: "Why should the job list come from a stable source?"
+    options:
+      - id: a
+        text: "Go cannot read files."
+        explanation: "Not correct. Go can read files."
+      - id: b
+        text: "Lists are limited to two items."
+        explanation: "Not correct. There is no limit."
+      - id: c
+        text: "The server rejects changing lists."
+        explanation: "Not correct. The rule is about repeatability."
+      - id: d
+        text: "A build must give the same result for the same commit."
+        explanation: "Correct. A source that changes between builds makes the code differ from the server."
+    correct_option: d
+    explanation: "Correct. A source that changes between builds makes the code differ from the server."
+
+  - id: ats108-030-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the counts in a test"
+    source_readings:
+      - sections/section-030/module-02/course-03-testing-dashboard-functions.md
+    prompt: "Where does a test read the number of panels of a built dashboard?"
+    options:
+      - id: a
+        text: "`builder.Dashboard.Spec.Panels`"
+        explanation: "Correct. The builder holds the finished dashboard after `dashboard.New` succeeds."
+      - id: b
+        text: "`builder.Panels`"
+        explanation: "Not correct. The dashboard is in the field `Dashboard`."
+      - id: c
+        text: "The `built` folder."
+        explanation: "Not correct. Tests do not build files."
+      - id: d
+        text: "The server API."
+        explanation: "Not correct. Tests run without a server."
+    correct_option: a
+    explanation: "Correct. The builder holds the finished dashboard after `dashboard.New` succeeds."
+
+  - id: ats108-030-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use t.Run"
+    source_readings:
+      - sections/section-030/module-02/course-03-testing-dashboard-functions.md
+    prompt: "What does `t.Run(job, ...)` give a table-driven test?"
+    options:
+      - id: a
+        text: "Parallel builds on the server."
+        explanation: "Not correct. It runs tests, not builds."
+      - id: b
+        text: "A named subtest for each case, so a failure names the input."
+        explanation: "Correct. A failing case is reported as the test name and the case name."
+      - id: c
+        text: "A faster compile."
+        explanation: "Not correct. It does not change compile time."
+      - id: d
+        text: "A new dashboard for each case."
+        explanation: "Not correct. The test builds its own."
+    correct_option: b
+    explanation: "Correct. A failing case is reported as the test name and the case name."
+
+  - id: ats108-030-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Place tests correctly"
+    source_readings:
+      - sections/section-030/module-02/course-03-testing-dashboard-functions.md
+    prompt: "Why must a test not sit next to `main.go` in a built folder?"
+    options:
+      - id: a
+        text: "Tests would be applied to the server."
+        explanation: "Not correct. Tests are not applied."
+      - id: b
+        text: "Go forbids tests in folders."
+        explanation: "Not correct. Tests are allowed in library packages."
+      - id: c
+        text: "`go run` refuses test files of package main, so the folder build fails."
+        explanation: "Correct. Keep logic and tests in `lib/boards`."
+      - id: d
+        text: "The test would run twice."
+        explanation: "Not correct. The issue is the build."
+    correct_option: c
+    explanation: "Correct. Keep logic and tests in `lib/boards`."
+
+  - id: ats108-030-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare two builds"
+    source_readings:
+      - sections/section-030/module-02/course-04-choosing-between-cue-and-go.md
+    prompt: "What should you compare when you port a dashboard between SDKs?"
+    options:
+      - id: a
+        text: "The whole JSON, including the name."
+        explanation: "Not correct. The names differ on purpose."
+      - id: b
+        text: "Only the file size."
+        explanation: "Not correct. Size says nothing about content."
+      - id: c
+        text: "Only the build time."
+        explanation: "Not correct. Time is not content."
+      - id: d
+        text: "Group titles, panel names, plugin kinds and queries."
+        explanation: "Correct. These parts must stay equal while both versions exist."
+    correct_option: d
+    explanation: "Correct. These parts must stay equal while both versions exist."
+
+  - id: ats108-030-q20
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Avoid replacing a dashboard"
+    source_readings:
+      - sections/section-030/module-02/course-04-choosing-between-cue-and-go.md
+    prompt: "Why give the old and new versions different names while you compare them?"
+    options:
+      - id: a
+        text: "Two resources with the same name and project replace each other on the server."
+        explanation: "Correct. Apply the new one and remove the old one only after the comparison."
+      - id: b
+        text: "Names must be unique in Git."
+        explanation: "Not correct. Git does not care."
+      - id: c
+        text: "`percli` rejects equal names at build time."
+        explanation: "Not correct. The build does not check this."
+      - id: d
+        text: "The plugin would fail to load."
+        explanation: "Not correct. Plugins are unrelated."
+    correct_option: a
+    explanation: "Correct. Apply the new one and remove the old one only after the comparison."
+

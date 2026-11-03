@@ -240,3 +240,234 @@ questions:
         explanation: "Correct. Only the pipeline's account needs edit rights."
     correct_option: d
     explanation: "Correct. Only the pipeline's account needs edit rights."
+
+  - id: ats108-040-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the login options"
+    source_readings:
+      - sections/section-040/module-02/course-01-authenticating-the-pipeline.md
+    prompt: "How can `percli login` authenticate to a server with authentication on?"
+    options:
+      - id: a
+        text: "With the Kubernetes service account."
+        explanation: "Not correct. The server does not read it."
+      - id: b
+        text: "With the Git password."
+        explanation: "Not correct. Git credentials are separate."
+      - id: c
+        text: "It cannot authenticate."
+        explanation: "Not correct. It can."
+      - id: d
+        text: "With a username and password, or with a token."
+        explanation: "Correct. A pipeline normally uses a dedicated user or token."
+    correct_option: d
+    explanation: "Correct. A pipeline normally uses a dedicated user or token."
+
+  - id: ats108-040-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Protect credentials"
+    source_readings:
+      - sections/section-040/module-02/course-01-authenticating-the-pipeline.md
+    prompt: "Where should a pipeline's password come from?"
+    options:
+      - id: a
+        text: "A Kubernetes Secret read into environment variables."
+        explanation: "Correct. The Job reads the Secret with `valueFrom.secretKeyRef`."
+      - id: b
+        text: "The script in the ConfigMap."
+        explanation: "Not correct. Everyone who reads the ConfigMap would see it."
+      - id: c
+        text: "The Git repository."
+        explanation: "Not correct. It would be in the history."
+      - id: d
+        text: "The Job name."
+        explanation: "Not correct. A name is not a secret."
+    correct_option: a
+    explanation: "Correct. The Job reads the Secret with `valueFrom.secretKeyRef`."
+
+  - id: ats108-040-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Avoid leaking secrets in logs"
+    source_readings:
+      - sections/section-040/module-02/course-01-authenticating-the-pipeline.md
+    prompt: "Why avoid `set -x` in a script that handles a password?"
+    options:
+      - id: a
+        text: "It stops the script."
+        explanation: "Not correct. It traces, it does not stop."
+      - id: b
+        text: "It prints every command with its values to the log."
+        explanation: "Correct. A traced command shows the password in the Job log."
+      - id: c
+        text: "It disables `set -e`."
+        explanation: "Not correct. They are separate options."
+      - id: d
+        text: "It slows `percli`."
+        explanation: "Not correct. The issue is the log."
+    correct_option: b
+    explanation: "Correct. A traced command shows the password in the Job log."
+
+  - id: ats108-040-q14
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe check mode"
+    source_readings:
+      - sections/section-040/module-02/course-02-check-and-deploy-modes.md
+    prompt: "What does a run with `MODE=check` do?"
+    options:
+      - id: a
+        text: "It applies the dashboards twice."
+        explanation: "Not correct. It applies nothing."
+      - id: b
+        text: "It skips the build."
+        explanation: "Not correct. It builds and lints."
+      - id: c
+        text: "It runs the steps up to the diff and exits successfully before the apply."
+        explanation: "Correct. The Job completes and the server stays unchanged."
+      - id: d
+        text: "It deletes the dashboards."
+        explanation: "Not correct. It changes nothing."
+    correct_option: c
+    explanation: "Correct. The Job completes and the server stays unchanged."
+
+  - id: ats108-040-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a default value"
+    source_readings:
+      - sections/section-040/module-02/course-02-check-and-deploy-modes.md
+    prompt: "Why does the script use `${MODE:-deploy}`?"
+    options:
+      - id: a
+        text: "It exports the variable."
+        explanation: "Not correct. It reads the value."
+      - id: b
+        text: "It requires a value."
+        explanation: "Not correct. It supplies a default."
+      - id: c
+        text: "It runs the apply twice."
+        explanation: "Not correct. It does not."
+      - id: d
+        text: "With `set -u`, an unset variable stops the script; the default makes it deploy."
+        explanation: "Correct. The expression is the value of MODE, or `deploy` when MODE is not set."
+    correct_option: d
+    explanation: "Correct. The expression is the value of MODE, or `deploy` when MODE is not set."
+
+  - id: ats108-040-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Scope the variable"
+    source_readings:
+      - sections/section-040/module-02/course-02-check-and-deploy-modes.md
+    prompt: "Where should `MODE=check` be set for a check run?"
+    options:
+      - id: a
+        text: "On one Job created from the CronJob."
+        explanation: "Correct. The CronJob stays without the variable so default runs deploy."
+      - id: b
+        text: "In the CronJob."
+        explanation: "Not correct. Every run would be a check run."
+      - id: c
+        text: "In the repository."
+        explanation: "Not correct. It is runtime configuration."
+      - id: d
+        text: "In Perses."
+        explanation: "Not correct. The server does not run the script."
+    correct_option: a
+    explanation: "Correct. The CronJob stays without the variable so default runs deploy."
+
+  - id: ats108-040-q17
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Fail a bad commit in check mode"
+    source_readings:
+      - sections/section-040/module-02/course-02-check-and-deploy-modes.md
+    prompt: "What happens to a check run on a commit with a broken dashboard?"
+    options:
+      - id: a
+        text: "It completes, because check mode ignores errors."
+        explanation: "Not correct. Check mode only skips the apply."
+      - id: b
+        text: "It fails, because build and lint run with `set -e` before the exit."
+        explanation: "Correct. The author sees the same error on a branch as on main."
+      - id: c
+        text: "It applies the other dashboards."
+        explanation: "Not correct. Nothing is applied."
+      - id: d
+        text: "It waits for the next commit."
+        explanation: "Not correct. The Job ends."
+    correct_option: b
+    explanation: "Correct. The author sees the same error on a branch as on main."
+
+  - id: ats108-040-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Align versions"
+    source_readings:
+      - sections/section-040/module-02/course-03-keeping-versions-aligned.md
+    prompt: "Which tools use the same release number in this course?"
+    options:
+      - id: a
+        text: "Only `percli` and Go."
+        explanation: "Not correct. The server and SDK modules match too."
+      - id: b
+        text: "Every plugin and the server."
+        explanation: "Not correct. Plugins have their own versions."
+      - id: c
+        text: "`percli`, the Perses server and the Perses SDK modules."
+        explanation: "Correct. A mismatch shows up as a rejected field or a plugin that fails to load."
+      - id: d
+        text: "None of them."
+        explanation: "Not correct. They must agree."
+    correct_option: c
+    explanation: "Correct. A mismatch shows up as a rejected field or a plugin that fails to load."
+
+  - id: ats108-040-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Verify through the API"
+    source_readings:
+      - sections/section-040/module-02/course-04-verifying-after-apply.md
+    prompt: "What does a green pipeline run prove?"
+    options:
+      - id: a
+        text: "That the server equals the build."
+        explanation: "Not correct. That needs a check."
+      - id: b
+        text: "That the dashboards are correct."
+        explanation: "Not correct. Correctness is separate."
+      - id: c
+        text: "That nobody edited the browser."
+        explanation: "Not correct. Drift is separate."
+      - id: d
+        text: "That every command exited with code 0, not that the server matches the code."
+        explanation: "Correct. Use the API list and `percli dac diff` after the apply to verify."
+    correct_option: d
+    explanation: "Correct. Use the API list and `percli dac diff` after the apply to verify."
+
+  - id: ats108-040-q20
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Add a verify step"
+    source_readings:
+      - sections/section-040/module-02/course-04-verifying-after-apply.md
+    prompt: "Where does a verify step with `percli dac diff` belong?"
+    options:
+      - id: a
+        text: "After `percli apply`, so the run succeeds only if the server equals the build."
+        explanation: "Correct. The diff after the apply turns the pipeline into its own verifier."
+      - id: b
+        text: "Before the build."
+        explanation: "Not correct. The built folder would be old."
+      - id: c
+        text: "Instead of the lint."
+        explanation: "Not correct. The lint checks resources."
+      - id: d
+        text: "In the CronJob schedule."
+        explanation: "Not correct. The schedule only sets timing."
+    correct_option: a
+    explanation: "Correct. The diff after the apply turns the pipeline into its own verifier."
+

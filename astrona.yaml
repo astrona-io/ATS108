@@ -100,8 +100,50 @@ modules:
           - name: "Dashboard-as-Code concept"
             url: https://perses.dev/perses/docs/concepts/dashboard-as-code/
       - type: reading
+        title: "Reading A Built Dashboard"
+        path: sections/section-010/module-01/course-04-reading-a-built-dashboard.md
+      - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Prepare A Repository And Control Where Dashboards Go"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "Setting Up A CUE Repository"
+        path: sections/section-010/module-02/course-01-setting-up-a-cue-repository.md
+      - type: reading
+        title: "Setting Up A Go Repository"
+        path: sections/section-010/module-02/course-02-setting-up-a-go-repository.md
+      - type: reading
+        title: "Controlling The Build"
+        path: sections/section-010/module-02/course-03-controlling-the-build.md
+      - type: reading
+        title: "Projects And The Apply Command"
+        path: sections/section-010/module-02/course-04-projects-and-apply.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Fix The Project Of A Dashboard Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: dac-workflow
+        task_kind: troubleshooting
+        tags: [percli-dac-build, percli-apply, built-folder, cue-sdk, git-workflow]
+        learning_goals:
+          - Read the project a built dashboard names in metadata.project
+          - Fix a wrong project in the source instead of forcing the apply
+          - Prove that the dashboard on the server is in the right project and equals the build
+        resources:
+          - name: "Getting started with Dashboard-as-Code"
+            url: https://perses.dev/perses/docs/dac/getting-started/
+          - name: "percli"
+            url: https://perses.dev/perses/docs/cli/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -175,8 +217,50 @@ modules:
           - name: "CUE: modules, packages and instances"
             url: https://cuelang.org/docs/concept/modules-packages-instances/
       - type: reading
+        title: "Reading A CUE Build Error"
+        path: sections/section-020/module-01/course-04-reading-cue-build-errors.md
+      - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-04-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Generate Dashboards With CUE"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "Lists And Comprehensions"
+        path: sections/section-020/module-02/course-01-lists-and-comprehensions.md
+      - type: reading
+        title: "Chained Variables"
+        path: sections/section-020/module-02/course-02-chained-variables.md
+      - type: reading
+        title: "Generating Panel Groups"
+        path: sections/section-020/module-02/course-03-generating-panel-groups.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Generate One Group Per Job With A Comprehension Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: cue
+        task_kind: build
+        tags: [cue-sdk, cue-definitions, panel-groups, schema-validation, percli-dac-build]
+        learning_goals:
+          - Write a CUE list comprehension that yields one panel group per job
+          - Reuse the shared panel definitions inside the comprehension
+          - Prove that the server dashboard equals what the code builds
+        resources:
+          - name: "CUE: list comprehensions"
+            url: https://cuelang.org/docs/tour/expressions/listcomprehensions/
+          - name: "Dashboard-as-Code with CUE"
+            url: https://perses.dev/perses/docs/dac/cue/
+      - type: reading
+        title: "Checking CUE With The CUE Tools"
+        path: sections/section-020/module-02/course-04-checking-cue-with-the-cue-tools.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -249,8 +333,50 @@ modules:
           - name: "Getting started with Dashboard-as-Code"
             url: https://perses.dev/perses/docs/dac/getting-started/
       - type: reading
+        title: "Running And Debugging A Dashboard Program"
+        path: sections/section-030/module-01/course-04-running-and-debugging.md
+      - type: reading
         title: Summary
-        path: sections/section-030/module-01/course-04-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Reusable Go Dashboards"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "Options As Building Blocks"
+        path: sections/section-030/module-02/course-01-options-as-building-blocks.md
+      - type: reading
+        title: "Data-Driven Dashboards"
+        path: sections/section-030/module-02/course-02-data-driven-dashboards.md
+      - type: reading
+        title: "Testing Dashboard Functions"
+        path: sections/section-030/module-02/course-03-testing-dashboard-functions.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Add A Reusable Job Group To The Go Library Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: go-sdk
+        task_kind: build
+        tags: [go-sdk, sdk-exec, go-tests, panel-groups, percli-dac-build]
+        learning_goals:
+          - Write a function that returns a dashboard.Option for one job
+          - Test the function in the library package
+          - Build a Go dashboard that loops over jobs and prove it matches the server
+        resources:
+          - name: "Dashboard-as-Code with Go"
+            url: https://perses.dev/perses/docs/dac/go/
+          - name: "Getting started with Dashboard-as-Code"
+            url: https://perses.dev/perses/docs/dac/getting-started/
+      - type: reading
+        title: "Choosing Between CUE And Go"
+        path: sections/section-030/module-02/course-04-choosing-between-cue-and-go.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -322,8 +448,50 @@ modules:
           - name: "percli"
             url: https://perses.dev/perses/docs/cli/
       - type: reading
+        title: "Reading A Pipeline Failure"
+        path: sections/section-040/module-01/course-04-reading-a-pipeline-failure.md
+      - type: reading
         title: Summary
-        path: sections/section-040/module-01/course-04-summary.md
+        path: sections/section-040/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Pipelines Beyond The Playground"
+        path: sections/section-040/module-02/course.md
+      - type: reading
+        title: "Authenticating The Pipeline"
+        path: sections/section-040/module-02/course-01-authenticating-the-pipeline.md
+      - type: reading
+        title: "Check And Deploy Modes"
+        path: sections/section-040/module-02/course-02-check-and-deploy-modes.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Add A Check Mode To The Pipeline Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: pipeline
+        task_kind: build
+        tags: [pipeline, kubernetes-job, percli-lint, percli-apply, fail-fast]
+        learning_goals:
+          - Add a check mode that stops before the apply step
+          - Keep the default run applying dashboards
+          - Prove that a check run changes nothing on the server and a deploy run applies
+        resources:
+          - name: "percli"
+            url: https://perses.dev/perses/docs/cli/
+          - name: "Dashboard-as-Code concept"
+            url: https://perses.dev/perses/docs/concepts/dashboard-as-code/
+      - type: reading
+        title: "Keeping Versions Aligned"
+        path: sections/section-040/module-02/course-03-keeping-versions-aligned.md
+      - type: reading
+        title: "Verifying After Apply"
+        path: sections/section-040/module-02/course-04-verifying-after-apply.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-02/course-05-summary.md
 
       - type: reading
         title: Question

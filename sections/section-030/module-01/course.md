@@ -4,7 +4,7 @@ A dashboard written as a Go program can use everything Go offers: functions, loo
 
 Keep one sentence in mind: **a Go dashboard is a `main` program that builds a dashboard with the SDK and prints only that dashboard.** Anything else it prints, and anything that stops it from running with `go run`, breaks the build.
 
-The module has three parts. **A Go Module For Dashboards** looks at the module files and the exec convention the build relies on. **Dashboards, Panel Groups, Panels And Queries In Go** writes a new dashboard with the builders and the plugin packages. **Reusable Functions And Tests** moves shared code into a library package and tests it. A graded lab follows the third part.
+The module has four parts. **A Go Module For Dashboards** looks at the module files and the exec convention the build relies on. **Dashboards, Panel Groups, Panels And Queries In Go** writes a new dashboard with the builders and the plugin packages. **Reusable Functions And Tests** moves shared code into a library package and tests it. A graded lab follows the third part. **Running And Debugging A Dashboard Program** then runs a program by hand and separates its output from its errors.
 
 ## Learning objectives
 

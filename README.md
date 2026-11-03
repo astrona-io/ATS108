@@ -25,10 +25,10 @@ section contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | Why Dashboard-As-Code | 1 | 1 + capstone | The workflow: repository, build, apply, diff |
-| [020](sections/section-020) | CUE For Dashboards | 1 | 1 + capstone | The CUE SDK |
-| [030](sections/section-030) | The Go SDK | 1 | 1 + capstone | The Go SDK |
-| [040](sections/section-040) | A Pipeline For Dashboards | 1 | 1 + capstone | Lint, build and apply from a Kubernetes Job |
+| [010](sections/section-010) | Why Dashboard-As-Code | 2 | 2 + capstone | The workflow: repository, build, apply, diff |
+| [020](sections/section-020) | CUE For Dashboards | 2 | 2 + capstone | The CUE SDK |
+| [030](sections/section-030) | The Go SDK | 2 | 2 + capstone | The Go SDK |
+| [040](sections/section-040) | A Pipeline For Dashboards | 2 | 2 + capstone | Lint, build and apply from a Kubernetes Job |
 
 The order goes from the workflow to the languages to automation. Section 010
 shows the loop every later page uses: edit, push, build, apply, diff.
@@ -41,10 +41,14 @@ Section 040 hands the loop to a pipeline that refuses broken commits.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Build And Apply Your First Dashboard As Code](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
-| 020-01 | [Write Dashboards In CUE](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
-| 030-01 | [Write Dashboards In Go](sections/section-030/module-01/course.md) | 3 | [lab-01](sections/section-030/module-01/labs/lab-01) |
-| 040-01 | [Lint, Build And Apply Dashboards From A Pipeline](sections/section-040/module-01/course.md) | 3 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 010-01 | [Build And Apply Your First Dashboard As Code](sections/section-010/module-01/course.md) | 4 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-02 | [Prepare A Repository And Control Where Dashboards Go](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
+| 020-01 | [Write Dashboards In CUE](sections/section-020/module-01/course.md) | 4 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 020-02 | [Generate Dashboards With CUE](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
+| 030-01 | [Write Dashboards In Go](sections/section-030/module-01/course.md) | 4 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 030-02 | [Reusable Go Dashboards](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
+| 040-01 | [Lint, Build And Apply Dashboards From A Pipeline](sections/section-040/module-01/course.md) | 4 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 040-02 | [Pipelines Beyond The Playground](sections/section-040/module-02/course.md) | 4 | [lab-01](sections/section-040/module-02/labs/lab-01) |
 
 ---
 
@@ -80,7 +84,7 @@ cluster through CoreDNS rewrites and on the machine through port-forwards.
 ## Running a playground
 
 ```bash
-astrona run --git ssh://git@github.com/astrona-io/ATS108.git -c sections/<section>/module-01/playground
+astrona run --git ssh://git@github.com/astrona-io/ATS108.git -c sections/<section>/module-0N/playground
 astrona destroy <name>
 ```
 
@@ -89,8 +93,8 @@ astrona destroy <name>
 Labs and capstones are graded. Read `question.md`, do the work, and submit:
 
 ```bash
-astrona run --git ssh://git@github.com/astrona-io/ATS108.git -c sections/<section>/module-01/labs/lab-01
-astrona submit -c sections/<section>/module-01/labs/lab-01
+astrona run --git ssh://git@github.com/astrona-io/ATS108.git -c sections/<section>/module-0N/labs/lab-01
+astrona submit -c sections/<section>/module-0N/labs/lab-01
 astrona destroy <name>
 ```
 

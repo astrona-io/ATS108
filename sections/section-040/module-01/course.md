@@ -4,7 +4,7 @@ A Dashboard-as-Code repository is only as safe as the way its dashboards reach t
 
 Keep one sentence in mind: **a pipeline is only as strict as its first step that is allowed to fail.** If a failed build or a failed lint does not stop the run, the pipeline applies broken dashboards with confidence.
 
-The module has three parts. **Validating Dashboards Before They Ship** looks at what `percli lint` really checks. **A Pipeline As A Kubernetes Job** reads the playground's pipeline, runs it, and follows its log. **Keeping Perses And Git The Same** covers credentials, deletions and edits made outside the pipeline. A graded lab follows the third part.
+The module has four parts. **Validating Dashboards Before They Ship** looks at what `percli lint` really checks. **A Pipeline As A Kubernetes Job** reads the playground's pipeline, runs it, and follows its log. **Keeping Perses And Git The Same** covers credentials, deletions and edits made outside the pipeline. A graded lab follows the third part. **Reading A Pipeline Failure** then makes a run fail on purpose and reads the evidence.
 
 ## Learning objectives
 

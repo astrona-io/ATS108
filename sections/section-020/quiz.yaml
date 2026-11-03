@@ -240,3 +240,234 @@ questions:
         explanation: "Not correct. The value is wrong, not incomplete."
     correct_option: b
     explanation: "Correct. The error is in the value. The schema is right."
+
+  - id: ats108-020-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write a list comprehension"
+    source_readings:
+      - sections/section-020/module-02/course-01-lists-and-comprehensions.md
+    prompt: "What does `[for j in jobs {j}]` produce?"
+    options:
+      - id: a
+        text: "A single string."
+        explanation: "Not correct. A comprehension in brackets builds a list."
+      - id: b
+        text: "An error, because CUE has no loops."
+        explanation: "Not correct. CUE has comprehensions."
+      - id: c
+        text: "The length of `jobs`."
+        explanation: "Not correct. The length needs `len`."
+      - id: d
+        text: "A new list with one element for each item of `jobs`."
+        explanation: "Correct. The loop variable takes each value in turn, and the body is the element."
+    correct_option: d
+    explanation: "Correct. The loop variable takes each value in turn, and the body is the element."
+
+  - id: ats108-020-q12
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Filter with if"
+    source_readings:
+      - sections/section-020/module-02/course-01-lists-and-comprehensions.md
+    prompt: "What does an `if` clause after `for` do?"
+    options:
+      - id: a
+        text: "It keeps only the items for which the condition is true."
+        explanation: "Correct. A condition lets one list serve several dashboards."
+      - id: b
+        text: "It stops the build when the condition is false."
+        explanation: "Not correct. It filters items, it does not fail."
+      - id: c
+        text: "It sets a default value."
+        explanation: "Not correct. A default uses `*`."
+      - id: d
+        text: "It adds a comment."
+        explanation: "Not correct. It changes the result."
+    correct_option: a
+    explanation: "Correct. A condition lets one list serve several dashboards."
+
+  - id: ats108-020-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Interpolate a string"
+    source_readings:
+      - sections/section-020/module-02/course-01-lists-and-comprehensions.md
+    prompt: "Which text inserts the value of `j` into a CUE string?"
+    options:
+      - id: a
+        text: "`${j}`"
+        explanation: "Not correct. That is shell syntax."
+      - id: b
+        text: "`\\(j)`"
+        explanation: "Correct. A backslash and a parenthesis start an interpolation inside a string."
+      - id: c
+        text: "`{{j}}`"
+        explanation: "Not correct. That is template syntax."
+      - id: d
+        text: "`%j`"
+        explanation: "Not correct. CUE does not use this."
+    correct_option: b
+    explanation: "Correct. A backslash and a parenthesis start an interpolation inside a string."
+
+  - id: ats108-020-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Hide helper values"
+    source_readings:
+      - sections/section-020/module-02/course-01-lists-and-comprehensions.md
+    prompt: "Why name a helper list `_jobs`?"
+    options:
+      - id: a
+        text: "It makes the list required."
+        explanation: "Not correct. Required fields use other syntax."
+      - id: b
+        text: "It makes the list a definition."
+        explanation: "Not correct. Definitions start with a hash."
+      - id: c
+        text: "A field that starts with an underscore is hidden, so it does not appear in the output."
+        explanation: "Correct. A normal field would appear in the dashboard and fail the schema."
+      - id: d
+        text: "It makes the list faster."
+        explanation: "Not correct. It changes visibility only."
+    correct_option: c
+    explanation: "Correct. A normal field would appear in the dashboard and fail the schema."
+
+  - id: ats108-020-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Chain variables"
+    source_readings:
+      - sections/section-020/module-02/course-02-chained-variables.md
+    prompt: "How does the variable group builder pass earlier variables to a later one?"
+    options:
+      - id: a
+        text: "By name, in any order."
+        explanation: "Not correct. Order decides."
+      - id: b
+        text: "It passes all variables to all variables."
+        explanation: "Not correct. Only earlier ones."
+      - id: c
+        text: "It does not chain variables."
+        explanation: "Not correct. It does."
+      - id: d
+        text: "In list order: each variable receives the ones listed before it."
+        explanation: "Correct. A later variable uses the earlier ones as filters in its matchers."
+    correct_option: d
+    explanation: "Correct. A later variable uses the earlier ones as filters in its matchers."
+
+  - id: ats108-020-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order chained variables"
+    source_readings:
+      - sections/section-020/module-02/course-02-chained-variables.md
+    prompt: "In which order should the `job` and `instance` variables be listed?"
+    options:
+      - id: a
+        text: "`job` first, then `instance`."
+        explanation: "Correct. List the broadest variable first and the most specific last."
+      - id: b
+        text: "`instance` first, then `job`."
+        explanation: "Not correct. `job` would then filter by `instance`."
+      - id: c
+        text: "Either order gives the same result."
+        explanation: "Not correct. The filter only flows forward."
+      - id: d
+        text: "They cannot be in one group."
+        explanation: "Not correct. They can."
+    correct_option: a
+    explanation: "Correct. List the broadest variable first and the most specific last."
+
+  - id: ats108-020-q17
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Generate groups"
+    source_readings:
+      - sections/section-020/module-02/course-03-generating-panel-groups.md
+    prompt: "How do you make a panel group for each job in `_jobs`?"
+    options:
+      - id: a
+        text: "Copy the group block for each job."
+        explanation: "Not correct. That repeats code."
+      - id: b
+        text: "Use a `for` comprehension that yields one group struct per job."
+        explanation: "Correct. The comprehension turns a data change into a structure change."
+      - id: c
+        text: "Add each job to `#title`."
+        explanation: "Not correct. A title is one string."
+      - id: d
+        text: "Use `cue fmt`."
+        explanation: "Not correct. Formatting does not generate."
+    correct_option: b
+    explanation: "Correct. The comprehension turns a data change into a structure change."
+
+  - id: ats108-020-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read panel keys"
+    source_readings:
+      - sections/section-020/module-02/course-03-generating-panel-groups.md
+    prompt: "What are the panel keys of two groups with one panel each?"
+    options:
+      - id: a
+        text: "The job names."
+        explanation: "Not correct. Keys follow positions."
+      - id: b
+        text: "`a` and `b`."
+        explanation: "Not correct. Keys are numeric."
+      - id: c
+        text: "`0_0` and `1_0`."
+        explanation: "Correct. A key is the group index and the panel index joined by an underscore."
+      - id: d
+        text: "`panel1` and `panel2`."
+        explanation: "Not correct. Keys use the group and panel position."
+    correct_option: c
+    explanation: "Correct. A key is the group index and the panel index joined by an underscore."
+
+  - id: ats108-020-q19
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Check CUE quickly"
+    source_readings:
+      - sections/section-020/module-02/course-04-checking-cue-with-the-cue-tools.md
+    prompt: "Which command prints one expression of a CUE file?"
+    options:
+      - id: a
+        text: "`cue fmt`"
+        explanation: "Not correct. It formats files."
+      - id: b
+        text: "`cue mod tidy`"
+        explanation: "Not correct. It manages dependencies."
+      - id: c
+        text: "`percli lint`"
+        explanation: "Not correct. It checks built resources."
+      - id: d
+        text: "`cue eval -e`"
+        explanation: "Correct. The option `-e` evaluates one expression, which is the fastest way to look at one value."
+    correct_option: d
+    explanation: "Correct. The option `-e` evaluates one expression, which is the fastest way to look at one value."
+
+  - id: ats108-020-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use cue vet"
+    source_readings:
+      - sections/section-020/module-02/course-04-checking-cue-with-the-cue-tools.md
+    prompt: "Why add `-c` to `cue vet` for a dashboard?"
+    options:
+      - id: a
+        text: "It requires every value to be concrete, as the build does."
+        explanation: "Correct. Without it, a file can pass while fields are still undecided."
+      - id: b
+        text: "It compresses the output."
+        explanation: "Not correct. It does not change the output."
+      - id: c
+        text: "It checks Go code too."
+        explanation: "Not correct. It checks CUE."
+      - id: d
+        text: "It skips imports."
+        explanation: "Not correct. It still evaluates imports."
+    correct_option: a
+    explanation: "Correct. Without it, a file can pass while fields are still undecided."
+

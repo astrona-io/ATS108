@@ -13,14 +13,23 @@ This section builds that pipeline as a Kubernetes Job: fetch the repository, bui
 
 ## The learning path
 
-The module has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, with a working pipeline CronJob called `dashboards-pipeline`.
+Each module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, with a working pipeline CronJob called `dashboards-pipeline`.
 
 ### 1. Lint, Build And Apply Dashboards From A Pipeline
 
 1. Validating Dashboards Before They Ship
 2. A Pipeline As A Kubernetes Job
 3. Keeping Perses And Git The Same, followed by the lab **Make The Pipeline Refuse Broken Dashboards**
-4. Summary
+4. Reading A Pipeline Failure
+5. Summary
+
+### 2. Pipelines Beyond The Playground
+
+1. Authenticating The Pipeline
+2. Check And Deploy Modes, followed by the lab **Add A Check Mode To The Pipeline**
+3. Keeping Versions Aligned
+4. Verifying After Apply
+5. Summary
 
 ## Section capstone: Run Dashboard-As-Code End To End
 

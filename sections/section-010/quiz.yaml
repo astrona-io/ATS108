@@ -240,3 +240,234 @@ questions:
         explanation: "Not correct. That flag only prints the built dashboard."
     correct_option: a
     explanation: "Correct. Any line in the diff is a difference between the code and the server."
+
+  - id: ats108-010-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the kind of a built dashboard"
+    source_readings:
+      - sections/section-010/module-01/course-04-reading-a-built-dashboard.md
+    prompt: "Which top-level fields does a built dashboard have?"
+    options:
+      - id: a
+        text: "`name`, `panels` and `layouts` only."
+        explanation: "Not correct. The panels and layouts are inside the spec, not at the top level."
+      - id: b
+        text: "`project`, `variables` and `duration` only."
+        explanation: "Not correct. These are inside the metadata or the spec."
+      - id: c
+        text: "`datasource`, `query` and `plugin` only."
+        explanation: "Not correct. These belong to a panel."
+      - id: d
+        text: "`kind`, `metadata` and `spec`."
+        explanation: "Correct. The kind tells the server the resource type, the metadata holds the name and project, and the spec holds everything the dashboard shows."
+    correct_option: d
+    explanation: "Correct. The kind tells the server the resource type, the metadata holds the name and project, and the spec holds everything the dashboard shows."
+
+  - id: ats108-010-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain how panels get a position"
+    source_readings:
+      - sections/section-010/module-01/course-04-reading-a-built-dashboard.md
+    prompt: "Where does a built dashboard store the position and size of a panel?"
+    options:
+      - id: a
+        text: "In an item of a layout, which refers to the panel by its key."
+        explanation: "Correct. A layout item has the fields x, y, width and height and a reference to the panel key."
+      - id: b
+        text: "In the panel's own `spec`."
+        explanation: "Not correct. A panel describes what it is, not where it is."
+      - id: c
+        text: "In the `metadata` of the dashboard."
+        explanation: "Not correct. The metadata holds the name and the project."
+      - id: d
+        text: "In the plugin options of the chart."
+        explanation: "Not correct. The plugin options hold chart settings such as the calculation."
+    correct_option: a
+    explanation: "Correct. A layout item has the fields x, y, width and height and a reference to the panel key."
+
+  - id: ats108-010-q13
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Prepare a CUE module"
+    source_readings:
+      - sections/section-010/module-02/course-01-setting-up-a-cue-repository.md
+    prompt: "What must exist before `percli dac setup` can prepare a CUE repository?"
+    options:
+      - id: a
+        text: "A running Perses server."
+        explanation: "Not correct. With `--version` the command works without a server."
+      - id: b
+        text: "A `cue.mod` folder created by `cue mod init`."
+        explanation: "Correct. The setup command needs the CUE module, then writes an example file and runs `cue mod tidy`."
+      - id: c
+        text: "A `built` folder."
+        explanation: "Not correct. The build creates this folder."
+      - id: d
+        text: "A Go module file."
+        explanation: "Not correct. Go modules are for the Go SDK."
+    correct_option: b
+    explanation: "Correct. The setup command needs the CUE module, then writes an example file and runs `cue mod tidy`."
+
+  - id: ats108-010-q14
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Prepare a Go module"
+    source_readings:
+      - sections/section-010/module-02/course-02-setting-up-a-go-repository.md
+    prompt: "What does `percli dac setup --language go` need in the folder?"
+    options:
+      - id: a
+        text: "A `cue.mod` folder."
+        explanation: "Not correct. That is for the CUE SDK."
+      - id: b
+        text: "A file called `built`."
+        explanation: "Not correct. The build creates the folder."
+      - id: c
+        text: "A `go.mod` file."
+        explanation: "Correct. It writes `main.go` and fetches the Perses Go module at the chosen version."
+      - id: d
+        text: "A running pipeline Job."
+        explanation: "Not correct. Setup does not use a pipeline."
+    correct_option: c
+    explanation: "Correct. It writes `main.go` and fetches the Perses Go module at the chosen version."
+
+  - id: ats108-010-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose between the file and folder build"
+    source_readings:
+      - sections/section-010/module-02/course-03-controlling-the-build.md
+    prompt: "What does `percli dac build -d dashboards -ojson` do that `-f` does not?"
+    options:
+      - id: a
+        text: "It merges all CUE files into one dashboard."
+        explanation: "Not correct. Each CUE file is evaluated on its own."
+      - id: b
+        text: "It applies the dashboards to the server."
+        explanation: "Not correct. Building never applies."
+      - id: c
+        text: "It only builds Go files."
+        explanation: "Not correct. It builds CUE files and Go programs."
+      - id: d
+        text: "It builds every dashboard file in the folder, each CUE file on its own."
+        explanation: "Correct. The folder build walks the folder and builds each CUE file and each Go program of package main."
+    correct_option: d
+    explanation: "Correct. The folder build walks the folder and builds each CUE file and each Go program of package main."
+
+  - id: ats108-010-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the output path"
+    source_readings:
+      - sections/section-010/module-02/course-03-controlling-the-build.md
+    prompt: "Where does the build write the result of `dashboards/cue/prometheus-overview.cue` in JSON?"
+    options:
+      - id: a
+        text: "`built/dashboards/cue/prometheus-overview_output.json`"
+        explanation: "Correct. The output path is the source path without its extension, placed in `built` with the suffix `_output` and the format."
+      - id: b
+        text: "`dashboards/cue/prometheus-overview.json`"
+        explanation: "Not correct. The result goes to the `built` folder."
+      - id: c
+        text: "`built/prometheus-overview.json`"
+        explanation: "Not correct. The path keeps the source folders."
+      - id: d
+        text: "Standard output only."
+        explanation: "Not correct. That happens only with `-m stdout`."
+    correct_option: a
+    explanation: "Correct. The output path is the source path without its extension, placed in `built` with the suffix `_output` and the format."
+
+  - id: ats108-010-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use stdout output"
+    source_readings:
+      - sections/section-010/module-02/course-03-controlling-the-build.md
+    prompt: "Why use `-m stdout` when you inspect a build?"
+    options:
+      - id: a
+        text: "It applies the result to the server."
+        explanation: "Not correct. It never contacts the server."
+      - id: b
+        text: "It prints the result instead of writing a file, so you can pipe it to `jq`."
+        explanation: "Correct. The mode prints the built dashboard so you can read it without changing files."
+      - id: c
+        text: "It makes the build faster by skipping CUE."
+        explanation: "Not correct. It evaluates the same file."
+      - id: d
+        text: "It is required for Go programs."
+        explanation: "Not correct. Go programs also write to the built folder by default."
+    correct_option: b
+    explanation: "Correct. The mode prints the built dashboard so you can read it without changing files."
+
+  - id: ats108-010-q18
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find the project a dashboard names"
+    source_readings:
+      - sections/section-010/module-02/course-04-projects-and-apply.md
+    prompt: "Where does a dashboard's project come from when you apply it?"
+    options:
+      - id: a
+        text: "From the name of the Git repository."
+        explanation: "Not correct. The repository name is not used."
+      - id: b
+        text: "From the first project on the server."
+        explanation: "Not correct. The resource names its own project."
+      - id: c
+        text: "From `metadata.project` in the built resource."
+        explanation: "Correct. The built resource names its project, and `percli apply` sends it there."
+      - id: d
+        text: "From the Kubernetes namespace."
+        explanation: "Not correct. Perses projects are not namespaces."
+    correct_option: c
+    explanation: "Correct. The built resource names its project, and `percli apply` sends it there."
+
+  - id: ats108-010-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle a project mismatch"
+    source_readings:
+      - sections/section-010/module-02/course-04-projects-and-apply.md
+    prompt: "A dashboard names a project that does not exist. What is the correct fix for a dashboard that belongs in `inventory`?"
+    options:
+      - id: a
+        text: "Apply with `--force`."
+        explanation: "Not correct. The source would still name the wrong project."
+      - id: b
+        text: "Create the missing project with `--create-project`."
+        explanation: "Not correct. That makes the wrong project permanent."
+      - id: c
+        text: "Edit the dashboard in the browser."
+        explanation: "Not correct. The code would then differ from the server."
+      - id: d
+        text: "Change the project in the source, commit, build and apply."
+        explanation: "Correct. The fix belongs in the code, so the next build and apply produce the right result."
+    correct_option: d
+    explanation: "Correct. The fix belongs in the code, so the next build and apply produce the right result."
+
+  - id: ats108-010-q20
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Verify the destination"
+    source_readings:
+      - sections/section-010/module-02/course-04-projects-and-apply.md
+    prompt: "How do you check which dashboards a project holds?"
+    options:
+      - id: a
+        text: "List them through the API path of that project."
+        explanation: "Correct. The API path contains the project, so the list shows only that project's dashboards."
+      - id: b
+        text: "Read the `built` folder."
+        explanation: "Not correct. It shows what was built, not what the server holds."
+      - id: c
+        text: "Run `git log`."
+        explanation: "Not correct. The log shows commits."
+      - id: d
+        text: "Read the CronJob."
+        explanation: "Not correct. The CronJob holds the pipeline."
+    correct_option: a
+    explanation: "Correct. The API path contains the project, so the list shows only that project's dashboards."
+

@@ -13,14 +13,23 @@ This section teaches the parts of CUE that dashboards need, the builders the Per
 
 ## The learning path
 
-The module has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, where the dashboard `prometheus-overview` is already applied from CUE.
+Each module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, where the dashboard `prometheus-overview` is already applied from CUE.
 
 ### 1. Write Dashboards In CUE
 
 1. CUE Essentials For Dashboards
 2. The Perses CUE Builders
 3. Shared Definitions And Build-Time Validation, followed by the lab **Compose A Dashboard From Shared Panels**
-4. Summary
+4. Reading A CUE Build Error
+5. Summary
+
+### 2. Generate Dashboards With CUE
+
+1. Lists And Comprehensions
+2. Chained Variables
+3. Generating Panel Groups, followed by the lab **Generate One Group Per Job With A Comprehension**
+4. Checking CUE With The CUE Tools
+5. Summary
 
 ## Section capstone: Repair A CUE Dashboard Library
 
