@@ -1,0 +1,242 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats108-040
+course_id: ATS108
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-040
+  title: "A Pipeline For Dashboards"
+questions:
+  - id: ats108-040-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what plain percli lint checks"
+    source_readings:
+      - sections/section-040/module-01/course-01-validating-dashboards.md
+    prompt: "What does `percli lint -d built` check when you give it no other flags?"
+    options:
+      - id: a
+        text: "Only that each file can be read as a Perses resource."
+        explanation: "Correct. It has no plugin schemas, so a panel with an unknown plugin still passes."
+      - id: b
+        text: "Every plugin kind and field against the server's schemas."
+        explanation: "Not correct. That needs `--online` or `--plugin.path`."
+      - id: c
+        text: "The custom lint rules of the server."
+        explanation: "Not correct. The server's rules apply only with `--online`."
+      - id: d
+        text: "That the dashboards exist on the server."
+        explanation: "Not correct. Lint does not talk to the server by default."
+    correct_option: a
+    explanation: "Correct. It has no plugin schemas, so a panel with an unknown plugin still passes."
+
+  - id: ats108-040-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Lint against the server"
+    source_readings:
+      - sections/section-040/module-01/course-01-validating-dashboards.md
+    prompt: "What does the flag `--online` change in `percli lint`?"
+    options:
+      - id: a
+        text: "It applies the dashboards to the server."
+        explanation: "Not correct. Lint never applies."
+      - id: b
+        text: "It downloads the plugin archives to your machine."
+        explanation: "Not correct. `--plugin.path` uses local archives."
+      - id: c
+        text: "It lints the source files in the repository."
+        explanation: "Not correct. Lint reads the built resources."
+      - id: d
+        text: "It sends each dashboard to the server's validation endpoint, which knows the plugins and applies its custom lint rules."
+        explanation: "Correct. The server rejects what a plain lint accepts."
+    correct_option: d
+    explanation: "Correct. The server rejects what a plain lint accepts."
+
+  - id: ats108-040-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Understand custom lint rules"
+    source_readings:
+      - sections/section-040/module-01/course-01-validating-dashboards.md
+    prompt: "Which parts does a custom lint rule have?"
+    options:
+      - id: a
+        text: "A `name`, a `query` (PromQL) and a `severity`."
+        explanation: "Not correct. Rules target the dashboard JSON, not metrics."
+      - id: b
+        text: "A `file`, a `line` and a `fix`."
+        explanation: "Not correct. Rules are not tied to source lines."
+      - id: c
+        text: "A `name`, a `target` (JSONPath), an `assertion` (CEL) and a `message`."
+        explanation: "Correct. The server keeps the rules under `dashboard.custom_lint_rules`."
+      - id: d
+        text: "A `schema` (CUE) and an `owner`."
+        explanation: "Not correct. Rules use JSONPath and CEL."
+    correct_option: c
+    explanation: "Correct. The server keeps the rules under `dashboard.custom_lint_rules`."
+
+  - id: ats108-040-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the order of the pipeline"
+    source_readings:
+      - sections/section-040/module-01/course-02-pipeline-as-a-job.md
+    prompt: "Which order do the steps of the pipeline script run in?"
+    options:
+      - id: a
+        text: "Fetch, apply, build, lint, diff, dependencies."
+        explanation: "Not correct. Nothing may be applied before the build and the lint."
+      - id: b
+        text: "Fetch, dependencies, build, lint, diff, apply."
+        explanation: "Correct. The lint and the diff come before the apply."
+      - id: c
+        text: "Build, fetch, lint, apply, dependencies, diff."
+        explanation: "Not correct. The code must be fetched first."
+      - id: d
+        text: "Dependencies, lint, build, diff, fetch, apply."
+        explanation: "Not correct. The lint needs built files."
+    correct_option: b
+    explanation: "Correct. The lint and the diff come before the apply."
+
+  - id: ats108-040-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain set -e"
+    source_readings:
+      - sections/section-040/module-01/course-02-pipeline-as-a-job.md
+    prompt: "What does `set -e` change in the pipeline script?"
+    options:
+      - id: a
+        text: "The shell stops at the first failing command, so a broken commit applies nothing."
+        explanation: "Correct. Without it, the script would apply every dashboard except the broken one."
+      - id: b
+        text: "It makes the build skip files that fail."
+        explanation: "Not correct. The build already continues with other files."
+      - id: c
+        text: "It retries a failed step once."
+        explanation: "Not correct. It does not retry."
+      - id: d
+        text: "It stops the shell on an undefined variable."
+        explanation: "Not correct. That is `set -u`."
+    correct_option: a
+    explanation: "Correct. Without it, the script would apply every dashboard except the broken one."
+
+  - id: ats108-040-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know how the Job is started"
+    source_readings:
+      - sections/section-040/module-01/course-02-pipeline-as-a-job.md
+    prompt: "How do you start a run of the pipeline in the playground?"
+    options:
+      - id: a
+        text: "Wait for the schedule of the CronJob."
+        explanation: "Not correct. It is suspended and never runs by itself."
+      - id: b
+        text: "Run `percli apply -d built` on your machine."
+        explanation: "Not correct. That skips the pipeline steps."
+      - id: c
+        text: "Edit the ConfigMap, which starts a run."
+        explanation: "Not correct. A changed ConfigMap starts nothing."
+      - id: d
+        text: "Create a Job from the suspended CronJob with `kubectl -n dac create job <name> --from=cronjob/dashboards-pipeline`."
+        explanation: "Correct. The CronJob only serves as a template."
+    correct_option: d
+    explanation: "Correct. The CronJob only serves as a template."
+
+  - id: ats108-040-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Avoid hiding failures"
+    source_readings:
+      - sections/section-040/module-01/course-02-pipeline-as-a-job.md
+    prompt: "Why is `|| true` after the build step a problem?"
+    options:
+      - id: a
+        text: "It makes the build run twice."
+        explanation: "Not correct. It only changes the exit code."
+      - id: b
+        text: "It sends the log to a different pod."
+        explanation: "Not correct. Logging is not affected."
+      - id: c
+        text: "The error is lost, and the run goes on to apply."
+        explanation: "Correct. The pipeline can no longer stop at a broken build."
+      - id: d
+        text: "It turns off linting for that run."
+        explanation: "Not correct. Lint is a separate step."
+    correct_option: c
+    explanation: "Correct. The pipeline can no longer stop at a broken build."
+
+  - id: ats108-040-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Log in from a pipeline"
+    source_readings:
+      - sections/section-040/module-01/course-03-keeping-perses-and-git-the-same.md
+    prompt: "Where do the credentials for `percli login` belong in the pipeline?"
+    options:
+      - id: a
+        text: "Written in the script in the ConfigMap."
+        explanation: "Not correct. Many people can read the ConfigMap."
+      - id: b
+        text: "In a Kubernetes Secret, passed to the Job's container as environment variables."
+        explanation: "Correct. The script reads them from the environment."
+      - id: c
+        text: "Committed in the repository next to the dashboards."
+        explanation: "Not correct. Secrets must not be in Git."
+      - id: d
+        text: "Typed by a person when the Job starts."
+        explanation: "Not correct. A pipeline cannot type a password."
+    correct_option: b
+    explanation: "Correct. The script reads them from the environment."
+
+  - id: ats108-040-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what apply does not do"
+    source_readings:
+      - sections/section-040/module-01/course-03-keeping-perses-and-git-the-same.md
+    prompt: "You delete a dashboard file from Git and push. What happens to the dashboard on the server at the next pipeline run?"
+    options:
+      - id: a
+        text: "It stays, because `percli apply` never deletes. Remove it on purpose with `percli delete dashboard`."
+        explanation: "Correct. The pipeline only sees what is in `built`."
+      - id: b
+        text: "The pipeline deletes it, because it is missing from `built`."
+        explanation: "Not correct. Missing files are not deleted."
+      - id: c
+        text: "The run fails, because the file is missing."
+        explanation: "Not correct. The run succeeds."
+      - id: d
+        text: "The dashboard becomes read-only."
+        explanation: "Not correct. Its state does not change."
+    correct_option: a
+    explanation: "Correct. The pipeline only sees what is in `built`."
+
+  - id: ats108-040-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Limit edits outside the pipeline"
+    source_readings:
+      - sections/section-040/module-01/course-03-keeping-perses-and-git-the-same.md
+    prompt: "Which two habits keep browser edits of code-managed dashboards rare?"
+    options:
+      - id: a
+        text: "Give everyone administrator rights and review the logs monthly."
+        explanation: "Not correct. Rights should be as small as possible."
+      - id: b
+        text: "Turn off the diff step and apply twice."
+        explanation: "Not correct. The diff step shows where drift happened."
+      - id: c
+        text: "Delete the `built` folder after each run."
+        explanation: "Not correct. That does not affect browser edits."
+      - id: d
+        text: "Give people read access only to those projects, and read the diff step in the pipeline log to find drift."
+        explanation: "Correct. Only the pipeline's account needs edit rights."
+    correct_option: d
+    explanation: "Correct. Only the pipeline's account needs edit rights."

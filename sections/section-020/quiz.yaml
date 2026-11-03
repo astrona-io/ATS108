@@ -1,0 +1,242 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats108-020
+course_id: ATS108
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "CUE For Dashboards"
+questions:
+  - id: ats108-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain unification"
+    source_readings:
+      - sections/section-020/module-01/course-01-cue-essentials.md
+    prompt: "Two lines in one CUE value set `height: 8` and `height: 12`. What happens?"
+    options:
+      - id: a
+        text: "The second value replaces the first, so the height is 12."
+        explanation: "Not correct. CUE never overwrites."
+      - id: b
+        text: "The first value wins, so the height is 8."
+        explanation: "Not correct. Order does not decide. Both must agree."
+      - id: c
+        text: "CUE reports a conflict, because it unifies values and does not overwrite."
+        explanation: "Correct. Unification keeps only what both values allow, and 8 and 12 allow no common value."
+      - id: d
+        text: "CUE picks the larger number."
+        explanation: "Not correct. CUE has no such rule."
+    correct_option: c
+    explanation: "Correct. Unification keeps only what both values allow, and 8 and 12 allow no common value."
+
+  - id: ats108-020-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use defaults in a disjunction"
+    source_readings:
+      - sections/section-020/module-01/course-01-cue-essentials.md
+    prompt: "In `calculation: \"first\" | *\"last\" | \"mean\"`, what does the `*` mark?"
+    options:
+      - id: a
+        text: "The value that is required in every dashboard."
+        explanation: "Not correct. A field with a default can be left out."
+      - id: b
+        text: "The default: the value CUE picks when nothing else decides."
+        explanation: "Correct. The default fills in a field that you did not write."
+      - id: c
+        text: "A wildcard that accepts any string."
+        explanation: "Not correct. Only the listed values are allowed."
+      - id: d
+        text: "A comment that CUE ignores."
+        explanation: "Not correct. It changes the result of the evaluation."
+    correct_option: b
+    explanation: "Correct. The default fills in a field that you did not write."
+
+  - id: ats108-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain closedness"
+    source_readings:
+      - sections/section-020/module-01/course-01-cue-essentials.md
+    prompt: "Why does unifying a definition with an extra field such as `color: \"red\"` fail?"
+    options:
+      - id: a
+        text: "A definition is closed, so a value unified with it may only use the fields it declares."
+        explanation: "Correct. This is how a plugin schema rejects a misspelled field."
+      - id: b
+        text: "The name `color` is a reserved word in CUE."
+        explanation: "Not correct. It is only an undeclared field."
+      - id: c
+        text: "Definitions can hold numbers but not strings."
+        explanation: "Not correct. They can hold any type."
+      - id: d
+        text: "The value is not concrete."
+        explanation: "Not correct. The error is about a field that is not allowed."
+    correct_option: a
+    explanation: "Correct. This is how a plugin schema rejects a misspelled field."
+
+  - id: ats108-020-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what --concrete requires"
+    source_readings:
+      - sections/section-020/module-01/course-01-cue-essentials.md
+    prompt: "What does `--concrete` require when `percli dac build` evaluates a CUE file?"
+    options:
+      - id: a
+        text: "Every field must be written in the dashboard file itself."
+        explanation: "Not correct. A default can also decide a value."
+      - id: b
+        text: "The file must import at least one package."
+        explanation: "Not correct. Imports are not required."
+      - id: c
+        text: "The file must be smaller than the schema."
+        explanation: "Not correct. There is no size rule."
+      - id: d
+        text: "Every output field must have one final value, set by you or by a default."
+        explanation: "Correct. A file can evaluate without `--concrete` and still fail the build."
+    correct_option: d
+    explanation: "Correct. A file can evaluate without `--concrete` and still fail the build."
+
+  - id: ats108-020-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the inputs of the dashboard builder"
+    source_readings:
+      - sections/section-020/module-01/course-02-perses-cue-builders.md
+    prompt: "How do you set the name of a dashboard with the Perses CUE dashboard builder?"
+    options:
+      - id: a
+        text: "Write `metadata: name:` yourself in the file."
+        explanation: "Not correct. That conflicts with what the builder produces."
+      - id: b
+        text: "Set `#display` to the name."
+        explanation: "Not correct. `#display` sets the title in `spec.display`."
+      - id: c
+        text: "Fill the input field `#name`, which sets `metadata.name`."
+        explanation: "Correct. Inputs start with `#`. The builder produces the output."
+      - id: d
+        text: "Name the file as the dashboard."
+        explanation: "Not correct. The file name does not set the dashboard name."
+    correct_option: c
+    explanation: "Correct. Inputs start with `#`. The builder produces the output."
+
+  - id: ats108-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read panel keys"
+    source_readings:
+      - sections/section-020/module-01/course-02-perses-cue-builders.md
+    prompt: "In a built dashboard, which key does the first panel of the second panel group get?"
+    options:
+      - id: a
+        text: "`0_1`, because groups count from the second item."
+        explanation: "Not correct. The group position comes first, and the second group is position 1."
+      - id: b
+        text: "`1_0`, made of the group's position and the panel's position."
+        explanation: "Correct. Moving a panel changes its key."
+      - id: c
+        text: "`panel-2`, taken from the panel title."
+        explanation: "Not correct. Keys follow positions, not names."
+      - id: d
+        text: "`2_0`, because counting starts at one."
+        explanation: "Not correct. Positions start at zero."
+    correct_option: b
+    explanation: "Correct. Moving a panel changes its key."
+
+  - id: ats108-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know how panels are placed"
+    source_readings:
+      - sections/section-020/module-01/course-02-perses-cue-builders.md
+    prompt: "With `#cols: 2` in a panel group, how wide is each panel on the 24-unit grid?"
+    options:
+      - id: a
+        text: "12 units, and the third panel starts a new row."
+        explanation: "Correct. The builder divides the grid by the number of columns."
+      - id: b
+        text: "24 units, and the panels stack in a column."
+        explanation: "Not correct. That would be `#cols: 1`."
+      - id: c
+        text: "2 units, one for each column."
+        explanation: "Not correct. The width is the grid divided by the columns."
+      - id: d
+        text: "8 units, a third of the grid."
+        explanation: "Not correct. That would be `#cols: 3`."
+    correct_option: a
+    explanation: "Correct. The builder divides the grid by the number of columns."
+
+  - id: ats108-020-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Import a plugin schema"
+    source_readings:
+      - sections/section-020/module-01/course-02-perses-cue-builders.md
+    prompt: "Why do plugin schema imports end with `:model`, as in `.../statchart/schemas:model`?"
+    options:
+      - id: a
+        text: "It selects the newest version of the plugin."
+        explanation: "Not correct. Versions are set in `cue.mod/module.cue`."
+      - id: b
+        text: "It marks the import as read-only."
+        explanation: "Not correct. Imports have no such mode."
+      - id: c
+        text: "It tells CUE to skip schema checks."
+        explanation: "Not correct. The schema is what the import loads."
+      - id: d
+        text: "The suffix selects the CUE package called `model` inside that folder."
+        explanation: "Correct. Without it, CUE looks for a package with the folder's name."
+    correct_option: d
+    explanation: "Correct. Without it, CUE looks for a package with the folder's name."
+
+  - id: ats108-020-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use a definition with a parameter"
+    source_readings:
+      - sections/section-020/module-01/course-03-shared-definitions-and-validation.md
+    prompt: "How does a dashboard use `#TargetsUp` for the job `perses`?"
+    options:
+      - id: a
+        text: "`panels.#TargetsUp.panel` alone."
+        explanation: "Not correct. That uses the default job `$job`, not `perses`."
+      - id: b
+        text: "`panels.#TargetsUp(\"perses\")`"
+        explanation: "Not correct. CUE definitions are not called like functions."
+      - id: c
+        text: "`{panels.#TargetsUp & {#job: \"perses\"}}.panel`"
+        explanation: "Correct. The braces unify the definition with the argument, and `.panel` selects the result."
+      - id: d
+        text: "`panels.#TargetsUp & {job: \"perses\"}`"
+        explanation: "Not correct. The parameter is `#job`, and the panel is in `.panel`."
+    correct_option: c
+    explanation: "Correct. The braces unify the definition with the argument, and `.panel` selects the result."
+
+  - id: ats108-020-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Fix a schema error at its source"
+    source_readings:
+      - sections/section-020/module-01/course-03-shared-definitions-and-validation.md
+    prompt: "A library change to `\"average\"` makes the build of every dashboard fail on `calculation`. What is the right fix?"
+    options:
+      - id: a
+        text: "Loosen the plugin schema so that `\"average\"` is allowed."
+        explanation: "Not correct. Never weaken the schema to fit a wrong value."
+      - id: b
+        text: "Change the value back to one the Stat chart accepts, such as `\"last\"`."
+        explanation: "Correct. The error is in the value. The schema is right."
+      - id: c
+        text: "Build the dashboards one by one until one passes."
+        explanation: "Not correct. Every dashboard that uses the panel fails the same way."
+      - id: d
+        text: "Remove `--concrete` from the build."
+        explanation: "Not correct. The value is wrong, not incomplete."
+    correct_option: b
+    explanation: "Correct. The error is in the value. The schema is right."

@@ -1,0 +1,242 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats108-030
+course_id: ATS108
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "The Go SDK"
+questions:
+  - id: ats108-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain how a Go dashboard runs"
+    source_readings:
+      - sections/section-030/module-01/course-01-go-module-and-exec.md
+    prompt: "How does `percli dac build` turn a Go dashboard into JSON?"
+    options:
+      - id: a
+        text: "It compiles the file into a library that Perses loads."
+        explanation: "Not correct. A Go dashboard is a program that runs once."
+      - id: b
+        text: "It calls `cue eval` on the Go file."
+        explanation: "Not correct. `cue eval` is for CUE files."
+      - id: c
+        text: "It sends the Go file to the Perses server to run."
+        explanation: "Not correct. The build runs locally."
+      - id: d
+        text: "It runs `go run <file> --output <format>` from the file's folder and takes standard output as the dashboard."
+        explanation: "Correct. The program prints the dashboard."
+    correct_option: d
+    explanation: "Correct. The program prints the dashboard."
+
+  - id: ats108-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the exec convention"
+    source_readings:
+      - sections/section-030/module-01/course-01-go-module-and-exec.md
+    prompt: "Which call ends every Go dashboard program and prints the dashboard?"
+    options:
+      - id: a
+        text: "`dashboard.New(...)`"
+        explanation: "Not correct. That creates the builder and does not print it."
+      - id: b
+        text: "`flag.Parse()`"
+        explanation: "Not correct. That reads the flags at the start."
+      - id: c
+        text: "`exec.BuildDashboard(builder, buildErr)`"
+        explanation: "Correct. It writes the dashboard, or the error to standard error with a non-zero exit code."
+      - id: d
+        text: "`sdk.NewExec()`"
+        explanation: "Not correct. That prepares the output. It does not print the dashboard."
+    correct_option: c
+    explanation: "Correct. It writes the dashboard, or the error to standard error with a non-zero exit code."
+
+  - id: ats108-030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep standard output clean"
+    source_readings:
+      - sections/section-030/module-01/course-01-go-module-and-exec.md
+    prompt: "A Go dashboard has `fmt.Println(\"building...\")` before `exec.BuildDashboard`. What happens?"
+    options:
+      - id: a
+        text: "`percli dac build` fails with a compile error."
+        explanation: "Not correct. The program compiles and runs."
+      - id: b
+        text: "`go run` succeeds, but the built file is not valid JSON."
+        explanation: "Correct. `percli` takes everything on standard output as the dashboard."
+      - id: c
+        text: "The text appears in the Perses user interface."
+        explanation: "Not correct. The text ends up in the built file."
+      - id: d
+        text: "The line is ignored because it is not a builder call."
+        explanation: "Not correct. Standard output is collected as it is."
+    correct_option: b
+    explanation: "Correct. `percli` takes everything on standard output as the dashboard."
+
+  - id: ats108-030-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the folder layout"
+    source_readings:
+      - sections/section-030/module-01/course-01-go-module-and-exec.md
+    prompt: "Why does each Go dashboard need a folder of its own?"
+    options:
+      - id: a
+        text: "Two dashboard programs in one folder form one `main` package with two `main` functions."
+        explanation: "Correct. That package does not compile."
+      - id: b
+        text: "`percli` reads only one file per folder name."
+        explanation: "Not correct. The reason is the Go package rules."
+      - id: c
+        text: "Git cannot store two Go files in one folder."
+        explanation: "Not correct. Git has no such limit."
+      - id: d
+        text: "The output file would have the same name."
+        explanation: "Not correct. The cause is the compile error, not the output name."
+    correct_option: a
+    explanation: "Correct. That package does not compile."
+
+  - id: ats108-030-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell the two names apart"
+    source_readings:
+      - sections/section-030/module-01/course-02-go-builders.md
+    prompt: "In `dashboard.New(\"perses-requests\", dashboard.Name(\"Perses Requests\"))`, what does `dashboard.Name` set?"
+    options:
+      - id: a
+        text: "The identifier `metadata.name`."
+        explanation: "Not correct. The first argument of `dashboard.New` sets that."
+      - id: b
+        text: "The Git branch of the dashboard."
+        explanation: "Not correct. Branches are not part of the resource."
+      - id: c
+        text: "The name of the output file."
+        explanation: "Not correct. The output file follows the source path."
+      - id: d
+        text: "The title shown in the browser. The first argument is the identifier `metadata.name`."
+        explanation: "Correct. The two are different fields."
+    correct_option: d
+    explanation: "Correct. The two are different fields."
+
+  - id: ats108-030-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the output of a Go build"
+    source_readings:
+      - sections/section-030/module-01/course-02-go-builders.md
+    prompt: "What is the name of the built file for `dashboards/go/perses-requests/main.go`?"
+    options:
+      - id: a
+        text: "`built/dashboards/go/perses-requests/perses-requests_output.json`"
+        explanation: "Not correct. The name comes from the file, not the dashboard."
+      - id: b
+        text: "`built/perses-requests.json`"
+        explanation: "Not correct. The folders of the source path are kept."
+      - id: c
+        text: "`built/dashboards/go/perses-requests/main_output.json`"
+        explanation: "Correct. The name follows the source file, which is `main.go`."
+      - id: d
+        text: "`built/dashboards/go/main.json`"
+        explanation: "Not correct. The dashboard's folder and `_output` are part of the name."
+    correct_option: c
+    explanation: "Correct. The name follows the source file, which is `main.go`."
+
+  - id: ats108-030-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the datasource in queries"
+    source_readings:
+      - sections/section-030/module-01/course-02-go-builders.md
+    prompt: "Why name the datasource with `query.Datasource` in a Go query?"
+    options:
+      - id: a
+        text: "Without it, the build fails."
+        explanation: "Not correct. The build works and uses the default."
+      - id: b
+        text: "Without it, the query uses the project's default datasource, and the dashboard changes if the default changes."
+        explanation: "Correct. Naming it keeps the dashboard stable."
+      - id: c
+        text: "Without it, the query runs against the Go program."
+        explanation: "Not correct. Queries run against the datasource on the server."
+      - id: d
+        text: "It is required to make the query valid PromQL."
+        explanation: "Not correct. It does not change the query text."
+    correct_option: b
+    explanation: "Correct. Naming it keeps the dashboard stable."
+
+  - id: ats108-030-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what a failing builder does"
+    source_readings:
+      - sections/section-030/module-01/course-02-go-builders.md
+    prompt: "What happens when `dashboard.New` returns an error for an invalid option?"
+    options:
+      - id: a
+        text: "`exec.BuildDashboard` writes the error to standard error and exits with a non-zero code, so the build reports the file as failed."
+        explanation: "Correct. No dashboard is printed."
+      - id: b
+        text: "The program prints an empty dashboard and exits with code 0."
+        explanation: "Not correct. It exits with a non-zero code."
+      - id: c
+        text: "The error is written to the built JSON file."
+        explanation: "Not correct. Errors go to standard error."
+      - id: d
+        text: "`go run` retries until the option is valid."
+        explanation: "Not correct. There is no retry."
+    correct_option: a
+    explanation: "Correct. No dashboard is printed."
+
+  - id: ats108-030-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know why shared functions help"
+    source_readings:
+      - sections/section-030/module-01/course-03-functions-and-tests.md
+    prompt: "Why put `TargetsUp(job string)` in a library package?"
+    options:
+      - id: a
+        text: "Library packages run faster than `main` packages."
+        explanation: "Not correct. Speed is not the reason."
+      - id: b
+        text: "Perses can only load panels from library packages."
+        explanation: "Not correct. Perses never loads Go code."
+      - id: c
+        text: "It lets the dashboard skip `exec.BuildDashboard`."
+        explanation: "Not correct. Every dashboard program still needs it."
+      - id: d
+        text: "Every dashboard imports one function, so a change to the query is made in one place."
+        explanation: "Correct. The function returns a `panelgroup.Option`."
+    correct_option: d
+    explanation: "Correct. The function returns a `panelgroup.Option`."
+
+  - id: ats108-030-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Place tests correctly"
+    source_readings:
+      - sections/section-030/module-01/course-03-functions-and-tests.md
+    prompt: "Where must Go tests for dashboard logic live?"
+    options:
+      - id: a
+        text: "Next to each `main.go` as `main_test.go`."
+        explanation: "Not correct. `percli dac build -d` then fails on that file."
+      - id: b
+        text: "In the `built` folder."
+        explanation: "Not correct. `built` holds results of the build."
+      - id: c
+        text: "In a library package such as `lib/boards`, outside `dashboards`."
+        explanation: "Correct. A `_test.go` file in package `main` under `dashboards` is passed to `go run`, which refuses it."
+      - id: d
+        text: "Tests are not possible for dashboards."
+        explanation: "Not correct. Library functions can be tested with `go test`."
+    correct_option: c
+    explanation: "Correct. A `_test.go` file in package `main` under `dashboards` is passed to `go run`, which refuses it."

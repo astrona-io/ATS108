@@ -1,0 +1,242 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats108-010
+course_id: ATS108
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Why Dashboard-As-Code"
+questions:
+  - id: ats108-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe what Perses stores for a dashboard"
+    source_readings:
+      - sections/section-010/module-01/course-01-dashboards-as-code.md
+    prompt: "In what form does a Perses server store a dashboard?"
+    options:
+      - id: a
+        text: "As a binary file that only the Perses user interface can write."
+        explanation: "Not correct. The stored object is JSON, and a text file can produce it."
+      - id: b
+        text: "As a resource: a JSON object with a `kind`, a `metadata` block and a `spec`."
+        explanation: "Correct. The `spec` holds panels, layouts, queries and variables."
+      - id: c
+        text: "As a Git commit in the Perses server's own repository."
+        explanation: "Not correct. Perses does not keep dashboards in Git by itself."
+      - id: d
+        text: "As a CUE package that the server evaluates on every request."
+        explanation: "Not correct. The server stores JSON, not CUE."
+    correct_option: b
+    explanation: "Correct. The `spec` holds panels, layouts, queries and variables."
+
+  - id: ats108-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what Git gives a dashboard"
+    source_readings:
+      - sections/section-010/module-01/course-01-dashboards-as-code.md
+    prompt: "Which problem does keeping the dashboard source in Git solve?"
+    options:
+      - id: a
+        text: "Each change has an author, a message and a diff, and the previous commit still builds the previous dashboard."
+        explanation: "Correct. Git gives history, review and a way back."
+      - id: b
+        text: "Perses can then no longer be edited in the browser by anyone."
+        explanation: "Not correct. Git does not block browser edits. The next apply only overwrites them."
+      - id: c
+        text: "The dashboard JSON becomes smaller and loads faster."
+        explanation: "Not correct. Git does not change the size or speed of the dashboard."
+      - id: d
+        text: "Queries are checked against live data before each commit."
+        explanation: "Not correct. Git does not run queries."
+    correct_option: a
+    explanation: "Correct. Git gives history, review and a way back."
+
+  - id: ats108-010-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Compare the CUE and Go SDKs"
+    source_readings:
+      - sections/section-010/module-01/course-01-dashboards-as-code.md
+    prompt: "How do the CUE SDK and the Go SDK differ in the dashboard they produce?"
+    options:
+      - id: a
+        text: "The CUE SDK produces YAML and the Go SDK produces JSON that Perses cannot read."
+        explanation: "Not correct. Both produce Perses resources."
+      - id: b
+        text: "Only the Go SDK can create panel groups."
+        explanation: "Not correct. Both SDKs build panel groups."
+      - id: c
+        text: "Only the CUE SDK can be applied with `percli apply`."
+        explanation: "Not correct. Built Go dashboards are applied the same way."
+      - id: d
+        text: "They produce the same Perses JSON. Only the way you write it differs."
+        explanation: "Correct. A repository can hold CUE files and Go programs side by side."
+    correct_option: d
+    explanation: "Correct. A repository can hold CUE files and Go programs side by side."
+
+  - id: ats108-010-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what percli dac build runs for a CUE file"
+    source_readings:
+      - sections/section-010/module-01/course-01-dashboards-as-code.md
+    prompt: "What does `percli dac build` run for a `.cue` dashboard file?"
+    options:
+      - id: a
+        text: "`go run <file> --output json`"
+        explanation: "Not correct. That command is what the build runs for a Go file."
+      - id: b
+        text: "`kubectl apply -f <file>`"
+        explanation: "Not correct. The build does not talk to the cluster."
+      - id: c
+        text: "`cue eval <file> --out json --concrete`"
+        explanation: "Correct. The `--concrete` flag fails the build if a value is still undecided."
+      - id: d
+        text: "`cue vet <file>` without any output"
+        explanation: "Not correct. The build needs the JSON output, so it uses `cue eval`."
+    correct_option: c
+    explanation: "Correct. The `--concrete` flag fails the build if a value is still undecided."
+
+  - id: ats108-010-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Place the files of a DaC repository"
+    source_readings:
+      - sections/section-010/module-01/course-02-repository-and-build.md
+    prompt: "Where does the repository put one Go dashboard?"
+    options:
+      - id: a
+        text: "In `lib/boards/`, together with the shared functions."
+        explanation: "Not correct. `lib/boards/` holds shared functions and their tests."
+      - id: b
+        text: "In its own folder, as `dashboards/go/<name>/main.go`."
+        explanation: "Correct. Each Go dashboard needs its own folder."
+      - id: c
+        text: "In `cue.mod/`, next to the module file."
+        explanation: "Not correct. `cue.mod/` holds the CUE module and its dependencies."
+      - id: d
+        text: "In `built/`, as a `.go` file."
+        explanation: "Not correct. `built/` holds results of the build, not source."
+    correct_option: b
+    explanation: "Correct. Each Go dashboard needs its own folder."
+
+  - id: ats108-010-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the output of a build"
+    source_readings:
+      - sections/section-010/module-01/course-02-repository-and-build.md
+    prompt: "Where does `percli dac build -f dashboards/cue/prometheus-overview.cue -ojson` write its result?"
+    options:
+      - id: a
+        text: "To `built/dashboards/cue/prometheus-overview_output.json`."
+        explanation: "Correct. The name is the source path with `_output` and the format added, under `built`."
+      - id: b
+        text: "To `dashboards/cue/prometheus-overview.json`, next to the source."
+        explanation: "Not correct. Results go under `built`, not next to the source."
+      - id: c
+        text: "To the Perses server, as a new dashboard."
+        explanation: "Not correct. The build only writes a file. `percli apply` sends it."
+      - id: d
+        text: "To `built/prometheus-overview.json` without the folders."
+        explanation: "Not correct. The folders of the source path are kept."
+    correct_option: a
+    explanation: "Correct. The name is the source path with `_output` and the format added, under `built`."
+
+  - id: ats108-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe building a whole folder"
+    source_readings:
+      - sections/section-010/module-01/course-02-repository-and-build.md
+    prompt: "What does `percli dac build -d dashboards` do when one dashboard file fails?"
+    options:
+      - id: a
+        text: "It stops at the first failure and builds nothing else."
+        explanation: "Not correct. It continues with the other files."
+      - id: b
+        text: "It skips the failing file and exits successfully."
+        explanation: "Not correct. The exit code is an error, so a pipeline can stop."
+      - id: c
+        text: "It applies the good files to the server."
+        explanation: "Not correct. Building never applies anything."
+      - id: d
+        text: "It builds the other files, lists the failures at the end and exits with an error."
+        explanation: "Correct. One broken file does not hide the results of the others, but the command still fails."
+    correct_option: d
+    explanation: "Correct. One broken file does not hide the results of the others, but the command still fails."
+
+  - id: ats108-010-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Recognise why a build shows old content"
+    source_readings:
+      - sections/section-010/module-01/course-02-repository-and-build.md
+    prompt: "You changed a dashboard on your machine and ran the build in the runner, but the output is the old dashboard. What is the most likely cause?"
+    options:
+      - id: a
+        text: "The `built` folder is committed and wins over the source."
+        explanation: "Not correct. `built` is ignored by Git."
+      - id: b
+        text: "`--concrete` keeps the first build in a cache."
+        explanation: "Not correct. `--concrete` only requires decided values."
+      - id: c
+        text: "You did not push the change. The runner builds `main` on Gitea."
+        explanation: "Correct. The runner resets its copy to `main` before every command."
+      - id: d
+        text: "`percli dac build` only reads dashboards that already exist on the server."
+        explanation: "Not correct. The build reads source files only."
+    correct_option: c
+    explanation: "Correct. The runner resets its copy to `main` before every command."
+
+  - id: ats108-010-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what percli apply does"
+    source_readings:
+      - sections/section-010/module-01/course-03-applying-and-diffing.md
+    prompt: "What does `percli apply` do with a built dashboard file?"
+    options:
+      - id: a
+        text: "It only updates existing dashboards and fails on new ones."
+        explanation: "Not correct. It creates new resources as well."
+      - id: b
+        text: "It creates the dashboard on the server if it does not exist and updates it if it does."
+        explanation: "Correct. It takes the project from the dashboard's `metadata.project`."
+      - id: c
+        text: "It builds the source file again and then compares it."
+        explanation: "Not correct. Building is a separate command."
+      - id: d
+        text: "It deletes dashboards on the server that are not in the file."
+        explanation: "Not correct. `percli apply` never deletes."
+    correct_option: b
+    explanation: "Correct. It takes the project from the dashboard's `metadata.project`."
+
+  - id: ats108-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Define drift and find it"
+    source_readings:
+      - sections/section-010/module-01/course-03-applying-and-diffing.md
+    prompt: "Which command shows drift between the code and the server, and what does it compare?"
+    options:
+      - id: a
+        text: "`percli dac diff` compares the `spec` of each built dashboard with the dashboard of the same name on the server."
+        explanation: "Correct. Any line in the diff is a difference between the code and the server."
+      - id: b
+        text: "`percli get dashboards` compares the list of names only."
+        explanation: "Not correct. It lists dashboards and shows no differences."
+      - id: c
+        text: "`percli apply --dry-run` compares the Git history with the server."
+        explanation: "Not correct. The diff command compares built files with the server."
+      - id: d
+        text: "`percli dac build -m stdout` compares two builds with each other."
+        explanation: "Not correct. That flag only prints the built dashboard."
+    correct_option: a
+    explanation: "Correct. Any line in the diff is a difference between the code and the server."
