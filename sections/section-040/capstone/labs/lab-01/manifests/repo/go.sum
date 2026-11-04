@@ -41,6 +41,8 @@ github.com/perses/plugins/prometheus v0.59.1 h1:BWTyfkJQK3eUn9LOOAjfmR2r2m0p5Vi/
 github.com/perses/plugins/prometheus v0.59.1/go.mod h1:4GOl9brt9mAWIuAUp5L+pQKVCfuIFJGlDraQEOPPyxs=
 github.com/perses/plugins/statchart v0.13.0 h1:NYbgu55/tFwdJklp1loMxF7NyAIzlw/zo+Zu4qjGJNg=
 github.com/perses/plugins/statchart v0.13.0/go.mod h1:biCyn2nkygrzgWCczfajjZCjtzWCZ1zzlf1C+oE+vTs=
+github.com/perses/plugins/statchart v0.15.1 h1:rb5Lfk/av0elfQPD2PSXrLYOFzE1qJeosDcoZcn+2qs=
+github.com/perses/plugins/statchart v0.15.1/go.mod h1:4+1+7iMBmYytwOzJMDsA8+GD4MQlw8//uf5eAf/jXk4=
 github.com/perses/plugins/timeserieschart v0.13.0 h1:FQqAAqXyaLsoLeZocoh0mhIj9GASXxqbHDC8h6DNqTU=
 github.com/perses/plugins/timeserieschart v0.13.0/go.mod h1:nfSKLYdmxVEUgkHUzcBFzGpymr3f7BA6ivCH9xXG9co=
 github.com/perses/spec v0.2.0 h1:m/cdXVErAfjDft+dfxkfL+63Z+ggJ0sY08Wg7Q9Ruzk=
