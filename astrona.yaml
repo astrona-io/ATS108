@@ -13,7 +13,7 @@
 training:
   id: ATS108
   title: "Perses: Dashboard-as-Code With CUE & Go"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Dashboard-as-Code domain of the Perses
     training path: why dashboards belong in Git, setting up a repository and
