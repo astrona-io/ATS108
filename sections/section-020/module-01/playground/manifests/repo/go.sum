@@ -45,6 +45,8 @@ github.com/perses/plugins/statchart v0.15.1 h1:rb5Lfk/av0elfQPD2PSXrLYOFzE1qJeos
 github.com/perses/plugins/statchart v0.15.1/go.mod h1:4+1+7iMBmYytwOzJMDsA8+GD4MQlw8//uf5eAf/jXk4=
 github.com/perses/plugins/timeserieschart v0.13.0 h1:FQqAAqXyaLsoLeZocoh0mhIj9GASXxqbHDC8h6DNqTU=
 github.com/perses/plugins/timeserieschart v0.13.0/go.mod h1:nfSKLYdmxVEUgkHUzcBFzGpymr3f7BA6ivCH9xXG9co=
+github.com/perses/plugins/timeserieschart v0.14.1 h1:NrziAXnNcXXa2SM0SDrB+gmICx/V0pBlFg5HhqFU11k=
+github.com/perses/plugins/timeserieschart v0.14.1/go.mod h1:GUcM+iqgQBim6LDi0pIYbBWSqQtl9dA3JBvo0MUngKk=
 github.com/perses/spec v0.2.0 h1:m/cdXVErAfjDft+dfxkfL+63Z+ggJ0sY08Wg7Q9Ruzk=
 github.com/perses/spec v0.2.0/go.mod h1:fyW8gFeaTXbF2TaE0N+iWrHtC7UZiRcT13qo+Y0ZEJM=
 github.com/perses/spec v0.3.0 h1:pAkpwX32lQpdz1YLmGmmAMItdgtuVDVrkAQfWEqX6ZI=

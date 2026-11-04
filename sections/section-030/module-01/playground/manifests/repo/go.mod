@@ -6,7 +6,7 @@ require (
 	github.com/perses/perses v0.55.0-rc.1
 	github.com/perses/plugins/prometheus v0.59.1
 	github.com/perses/plugins/statchart v0.15.1
-	github.com/perses/plugins/timeserieschart v0.13.0
+	github.com/perses/plugins/timeserieschart v0.14.1
 )
 
 require (
